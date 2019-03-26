@@ -1,5 +1,5 @@
 # wildcat.pytorch
-PyTorch implementation of "WILDCAT: Weakly Supervised Learning of Deep ConvNets for Image Classification, Pointwise Localization and Segmentation", CVPR 2017 (http://webia.lip6.fr/~durandt/pdfs/2017_CVPR/Durand_WILDCAT_CVPR_2017.pdf)
+PyTorch implementation of "WILDCAT: Weakly Supervised Learning of Deep ConvNets for Image Classification, Pointwise Localization and Segmentation", CVPR 2017 (http://webia.lip6.fr/~durandt/pdfs/2017_CVPR/Durand_WILDCAT_CVPR_2017.pdf) reprise par Nicolas pour produire des boites et fonctionner sur IconArt_v1
 
 ### Requirements
 Please, install the following packages
@@ -8,6 +8,8 @@ Please, install the following packages
 - torchnet
 - torchvision
 - tqdm
+
+Possibilité d'utiliser pour installer trochnet : pip install git+https://github.com/pytorch/tnt.git@master
 
 ### Options
 
@@ -28,6 +30,17 @@ python3 -m wildcat.demo_voc2007 ../data/voc --image-size 448 --batch-size 16 --l
 ### Demo MIT67
 ```sh
 python3 -m wildcat.demo_mit67 ../data/mit67 --image-size 448 --batch-size 16 --lrp 0.1 --lr 0.001 --epochs 20 --k 0.4 --maps 8
+```
+
+### Demo IconArt_v1
+For training :
+```sh
+python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 0.2 --maps 4 --alpha 0.7
+```
+
+For testing and plot images boxes
+```sh
+python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 0.2 --maps 4 --alpha 0.7 --test --plot
 ```
 
 ## Citing this repository

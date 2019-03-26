@@ -2,7 +2,7 @@ import math
 from urllib.request import urlretrieve
 
 import torch
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from tqdm import tqdm
 
 
@@ -174,3 +174,16 @@ class AveragePrecisionMeter(object):
                 precision_at_i += pos_count / total_count
         precision_at_i /= pos_count
         return precision_at_i
+
+def draw_bboxes(img, bboxes, class_names, width=3, font_size=20, color=(255, 255, 0)):
+	img = img.copy()
+	fnt = ImageFont.truetype('arial.ttf', font_size)
+	for bbox in bboxes:
+		class_idx, xmin, ymin, xmax, ymax, score = bbox
+		draw = ImageDraw.Draw(img)
+		draw.line((xmin, ymin, xmax, ymin), fill=color, width=width)
+		draw.line((xmax, ymin, xmax, ymax), fill=color, width=width)
+		draw.line((xmin, ymax, xmax, ymax), fill=color, width=width)
+		draw.line((xmin, ymin, xmin, ymax), fill=color, width=width)
+		draw.text((xmin, ymin), '{}({:.2f})'.format(class_names[int(class_idx)], score), font=fnt, fill=color)
+	return img

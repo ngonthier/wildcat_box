@@ -110,16 +110,24 @@ class Engine(object):
 
     def on_forward(self, training, model, criterion, data_loader, optimizer=None, display=True):
 
+        #print(self.state['input'])
         input_var = torch.autograd.Variable(self.state['input'])
         target_var = torch.autograd.Variable(self.state['target'])
-
+        #print(input_var.size())
+        #print(target_var.size())
         if not training:
-            input_var.volatile = True
-            target_var.volatile = True
-
-        # compute output
-        self.state['output'] = model(input_var)
-        self.state['loss'] = criterion(self.state['output'], target_var)
+            #input_var.volatile = True
+            #target_var.volatile = True
+            with torch.no_grad():
+                # compute output
+                self.state['output'] = model(input_var)
+                #print(self.state['output'].size())
+                self.state['loss'] = criterion(self.state['output'], target_var)
+        else:
+            # compute output
+            self.state['output'] = model(input_var)
+            #print(self.state['output'].size())
+            self.state['loss'] = criterion(self.state['output'], target_var)
 
         if training:
             optimizer.zero_grad()
@@ -282,6 +290,7 @@ class Engine(object):
 
             if self.state['use_gpu']:
                 self.state['target'] = self.state['target'].cuda(async=True)
+                self.state['input'] = self.state['input'].cuda(async=True)
 
             self.on_forward(False, model, criterion, data_loader)
 
@@ -324,6 +333,17 @@ class Engine(object):
             for param_group in optimizer.state_dict()['param_groups']:
                 param_group['lr'] = param_group['lr'] * 0.1
                 print(param_group['lr'])
+                
+    def get_saved_model(self):
+        if os.path.isfile(self.state['resume']):
+            print("=> loading checkpoint '{}'".format(self.state['resume']))
+            checkpoint = torch.load(self.state['resume'])
+            self.state['start_epoch'] = checkpoint['epoch']
+            self.state['best_score'] = checkpoint['best_score']
+            model.load_state_dict(checkpoint['state_dict'])
+            print("=> loaded checkpoint '{}' (epoch {})"
+                  .format(self.state['evaluate'], checkpoint['epoch']))
+
 
 
 class MulticlassEngine(Engine):
@@ -392,6 +412,8 @@ class MulticlassTop5Engine(Engine):
         self.state['classacc'].reset()
 
     def on_end_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
+        classacc = 100 * self.state['classacc'].value()
+        #print(classacc)
         top1 = self.state['classacc'].value()[0]
         top5 = self.state['classacc'].value()[1]
         loss = self.state['meter_loss'].value()[0]
@@ -458,6 +480,7 @@ class MultiLabelMAPEngine(Engine):
 
     def on_end_epoch(self, training, model, criterion, data_loader, optimizer=None, display=True):
         map = 100 * self.state['ap_meter'].value().mean()
+        AP = 100 * self.state['ap_meter'].value()
         loss = self.state['meter_loss'].value()[0]
         if display:
             if training:
@@ -467,6 +490,7 @@ class MultiLabelMAPEngine(Engine):
                       'mAP {map:.3f}'.format(self.state['epoch'], loss=loss, map=map))
             else:
                 print('Test: \t Loss {loss:.4f}\t mAP {map:.3f}'.format(loss=loss, map=map))
+                print('For Each class: ',AP)
 
         return map
 
