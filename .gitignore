@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# folders
+expes/
+*.out
+tmp/
+*.save
