@@ -10,6 +10,7 @@ from wildcat.boxesPredict import object_localization
 
 from wildcat.tf_faster_rcnn.lib.datasets.factory import get_imdb
 
+from shutil import copyfile
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from torch.autograd import Variable
@@ -57,7 +58,9 @@ parser.add_argument('--alpha', default=1, type=float,
 parser.add_argument('--maps', default=1, type=int,
                     metavar='N', help='number of maps per class (default: 1)')
 parser.add_argument('--test', action="store_true",
-                    help='Use this command to eval the performance of the model')
+                    help='Use this command to eval the detection performance of the model')
+parser.add_argument('--classif', action="store_true",
+                    help='Use this command to eval the classification performance of the model')
 parser.add_argument('--plot', action="store_true",
                     help='Use this command to plot the bounding boxes.')
 
@@ -66,9 +69,13 @@ def train_or_test_IconArt_v1():
     global args, best_prec1, use_gpu
     args = parser.parse_args()
 
+    model_name = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
+    '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
+    '_a'+str(args.alpha)+'_m'+str(args.maps)+'.pth.tar'
+
     use_gpu = torch.cuda.is_available()
 
-    if not(args.test):
+    if not(args.test) and not(args.classif):
         print("Training")
 
         # define dataset
@@ -92,13 +99,18 @@ def train_or_test_IconArt_v1():
                  'evaluate': args.evaluate, 'resume': args.resume}
         state['difficult_examples'] = True
         state['save_model_path'] = 'expes/models/IconArt_v1/'
-
         engine = MultiLabelMAPEngine(state)
         engine.learning(model, criterion, train_dataset, val_dataset, optimizer)
 
+        # Copy the checkpoint with a new name
+        
+        path = state['save_model_path']
+        src = path + 'model_best.pth.tar'
+        dst = path + model_name
+        copyfile(src, dst)
     else:
         print("Testing detection")
-        PATH =  'expes/models/IconArt_v1/model_best.pth.tar'
+        PATH =  'expes/models/IconArt_v1/'+model_name
         state = {'batch_size': args.batch_size, 'image_size': args.image_size, 'max_epochs': args.epochs,
                  'evaluate': args.evaluate, 'resume': PATH}
         state['difficult_examples'] = True
@@ -117,11 +129,11 @@ def train_or_test_IconArt_v1():
         state_dict = state_dict_all["state_dict"]
         model.load_state_dict(state_dict)
 
-        classwise_feature_maps = []
-        def hook(module, input1, output2):
-            classwise_feature_maps.append(output2)
+        #classwise_feature_maps = []
+        #def hook(module, input1, output2):
+            #classwise_feature_maps.append(output2)
 
-        model.spatial_pooling.class_wise.register_forward_hook(hook)
+        #model.spatial_pooling.class_wise.register_forward_hook(hook)
 
         normalize = transforms.Normalize(mean=model.image_normalization_mean,
                                                  std=model.image_normalization_std)
@@ -154,7 +166,10 @@ def train_or_test_IconArt_v1():
         val_loader = torch.utils.data.DataLoader(val_dataset,
                                                  batch_size=state['batch_size'], shuffle=False,
                                                  num_workers=state['workers'])
-        #engine.validate(val_loader, model, criterion)
+        if args.classif:
+            engine.validate(val_loader, model, criterion)
+            if not(args.test):
+                return(0)
 
         database = 'IconArt_v1_test'
         imdb = get_imdb('IconArt_v1_test')
@@ -165,7 +180,7 @@ def train_or_test_IconArt_v1():
         max_per_image = 100
         num_images_detect =  len(imdb.image_index)
         all_boxes_order = [[[] for _ in range(num_images_detect)] for _ in range(imdb.num_classes)]
-
+        
         plot = args.plot
         if plot:
             plt.ion()
@@ -196,12 +211,15 @@ def train_or_test_IconArt_v1():
                     image_name_split = image_name.split('/')[-1]
                     image_name_split = image_name_split.split('.')[0]
                     gt_labels = np.unique(imdb._load_pascal_annotation(image_name_split)['gt_classes'])
+                    #print('gt_labels',gt_labels)
                     gt_labels_minus1 = gt_labels -1 # Background as class 0
+                    #gt_labels_minus = None
 
                 #preds, labels = object_localization(model_dict, input_var, location_type='bbox',gt_labels=None)
                 #print('labels',labels)
                 #print('labels.cpu().numpy()',labels.cpu().numpy())
-                preds, labels = object_localization(model, input_var,classwise_feature_maps, location_type='bbox',
+                
+                preds, labels = object_localization(model, input_var, location_type='bbox',
                     gt_labels=gt_labels_minus1,size=args.image_size)
                 #print('gt_labels_minus1',gt_labels_minus1)
                 #print('labels',labels)
@@ -211,13 +229,17 @@ def train_or_test_IconArt_v1():
                 x_,y_,_ = np.array(image_raw).shape # when you use cv2 the x and y are inverted
                 x_scale = x_ / args.image_size
                 y_scale = y_ / args.image_size
-                for i,box in enumerate(preds):
+                #print(x_scale,y_scale)
+                for ii,box in enumerate(preds):
+                    #print(x_,y_)
+                    #print(box)
                     (classe,origLeft, origTop, origRight, origBottom,score) = box
                     x = origLeft * x_scale
                     y = origTop * y_scale
                     xmax = origRight * x_scale
                     ymax = origBottom * y_scale
-                    preds[i] = [classe,x, y, xmax, ymax,score]
+                    preds[ii] = [classe,x, y, xmax, ymax,score]
+                    #print(preds[ii])
 
                 if plot:
                     preds_np =np.array(preds)
@@ -235,6 +257,7 @@ def train_or_test_IconArt_v1():
                             name_output =  folder + tmp.split('.')[0] +'_Regions.jpg'
                             plt.axis('off')
                             plt.tight_layout()
+                            #plt.show()
                             plt.savefig(name_output)
                             #input('wait')
 
@@ -244,12 +267,12 @@ def train_or_test_IconArt_v1():
                         all_boxes_order[index_c][i] = np.array([preds[j][1:]])
                     else:
                         all_boxes_order[index_c][i] = np.vstack((preds[j][1:],all_boxes_order[index_c][i]))
-                if not(with_gt):
-                    for c in labels:
-                        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
-                else: # gt cases
-                    for c in labels:
-                        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
+                #if not(with_gt):
+                #    for c in labels:
+                #        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
+                #else: # gt cases
+                #    for c in labels:
+                #        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
 
         output_dir = 'tmp/'
         aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
@@ -263,11 +286,11 @@ def train_or_test_IconArt_v1():
                 apsAt01 = aps
             print("Detection score with thres at ",ovthresh)
             print(arrayToLatex(aps,per=True))
-        imdb.set_use_diff(True) # Modification of the use_diff attribute in the imdb
-        aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
-        print("Detection score with the difficult element")
-        print(arrayToLatex(aps,per=True))
-        imdb.set_use_diff(False)
+        #imdb.set_use_diff(True) # Modification of the use_diff attribute in the imdb
+        #aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
+        #print("Detection score with the difficult element")
+        #print(arrayToLatex(aps,per=True))
+        #imdb.set_use_diff(False)
 
 
 

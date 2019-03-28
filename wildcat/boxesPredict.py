@@ -65,7 +65,12 @@ def extract_point_from_map(input):
 
 def localize_from_map(class_response_map, class_idx=0, location_type='bbox', threshold_ratio=1, multi_objects=True):
     assert location_type == 'bbox' or location_type == 'point', 'Unknown location type'
+    #print('new im')
+    #print(class_response_map.min())
+    #print(class_response_map.max())
+    #print(class_response_map.mean())
     foreground_map = class_response_map >= (class_response_map.mean() * threshold_ratio)
+    #foreground_map = class_response_map >= max(0.,class_response_map.mean())
     if multi_objects:
         objects, count = label(foreground_map)
         res = []
@@ -87,7 +92,7 @@ def localize_from_map(class_response_map, class_idx=0, location_type='bbox', thr
         elif location_type == 'point':
             return [(class_idx,) + extract_point_from_map(class_response_map) + (class_response_map.max(),), ]
 
-def object_localization(model, input,classwise_feature_maps, **kwargs):
+def object_localization(model, input, **kwargs):
     # multi-scale detection
     #scales = sorted(kwargs.pop('scales', models.keys()), reverse=True)
     # localize with/without prediction
@@ -118,6 +123,13 @@ def object_localization(model, input,classwise_feature_maps, **kwargs):
 
     # localize objects
     predictions = []
+    
+    classwise_feature_maps = []
+    def hook(module, input1, output2):
+        classwise_feature_maps.append(output2)
+
+    model.spatial_pooling.class_wise.register_forward_hook(hook)
+    
     #for size in scales:
         #model = models[size] if len(models) > 1 else next(iter(models.values()))
         #class_scores = model(F.upsample(input, size=(size, size), mode='bilinear'))
@@ -127,10 +139,13 @@ def object_localization(model, input,classwise_feature_maps, **kwargs):
             #class_response_map = F.upsample(model.class_response_maps[0, class_idx].unsqueeze(0).unsqueeze(0), size=(input.size(2), input.size(3)), mode='bilinear')
             #predictions += localize_from_map(class_response_map.squeeze().data.cpu().numpy(), **kwargs)
 
-    class_scores = model(F.upsample(input, size=(size, size), mode='bilinear'))  
+    #class_scores = model(F.upsample(input, size=(size, size), mode='bilinear'))  
+    class_scores = model(input)
+    #print(class_scores)
     class_response_maps = F.upsample(classwise_feature_maps[0], size=(input.size(2), input.size(3)), mode='bilinear')
     #pred_labels = torch.nonzero(class_scores.data.squeeze() > threshold).squeeze() if pred_labels is None else pred_labels
     pred_labels = torch.nonzero(class_scores.data.squeeze() > threshold)
+    #print('pred_labels',pred_labels)
     #.squeeze() if pred_labels is None else pred_labels
     pred_labels_list = [elt.item() for elt in pred_labels]
     for class_idx in pred_labels_list:
@@ -146,6 +161,8 @@ def object_localization(model, input,classwise_feature_maps, **kwargs):
     pred_labels_list = []
     for b in predictions:
         pred_labels_list += [b[0]]
+    #print(predictions)
+    #print('pred_labels_list',pred_labels_list)
     return predictions, pred_labels_list
 
 #if __name__ == '__main__':
