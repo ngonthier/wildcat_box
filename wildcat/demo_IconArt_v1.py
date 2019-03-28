@@ -69,9 +69,10 @@ def train_or_test_IconArt_v1():
     global args, best_prec1, use_gpu
     args = parser.parse_args()
 
-    model_name = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
+    model_name_base = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
     '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
-    '_a'+str(args.alpha)+'_m'+str(args.maps)+'.pth.tar'
+    '_a'+str(args.alpha)+'_m'+str(args.maps)
+    model_name = model_name_base+'.pth.tar'
 
     use_gpu = torch.cuda.is_available()
 
@@ -185,7 +186,7 @@ def train_or_test_IconArt_v1():
         if plot:
             plt.ion()
             import pathlib
-            folder = '/media/HDD/output_exp/WILDCAT/'+ 'WILDCAT_bs'+str(args.batch_size)+'_is'+str(args.image_size)+'_ep'+str(args.epochs)+'/'
+            folder = '/media/HDD/output_exp/WILDCAT/'+ 'WILDCAT_'+model_name_base
             pathlib.Path(folder).mkdir(parents=True, exist_ok=True)
         Itera = 500
         for i in range(num_images_detect):
@@ -297,3 +298,7 @@ def train_or_test_IconArt_v1():
 
 if __name__ == '__main__':
     train_or_test_IconArt_v1()
+    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 10 --k 1 --maps 1 --alpha 0.0 --test --classif
+    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7 --test --classif
+    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 448 --batch-size 16 --lrp 0.1 --lr 0.01 --epochs 20 --k 20 --maps 8 --alpha 0.7 --test --classif
+
