@@ -186,7 +186,7 @@ def train_or_test_IconArt_v1():
         if plot:
             plt.ion()
             import pathlib
-            folder = '/media/HDD/output_exp/WILDCAT/'+ 'WILDCAT_'+model_name_base
+            folder = '/media/HDD/output_exp/WILDCAT/'+ 'WILDCAT_'+model_name_base+'/'
             pathlib.Path(folder).mkdir(parents=True, exist_ok=True)
         Itera = 500
         for i in range(num_images_detect):
@@ -259,7 +259,7 @@ def train_or_test_IconArt_v1():
                             plt.axis('off')
                             plt.tight_layout()
                             #plt.show()
-                            plt.savefig(name_output)
+                            plt.savefig(name_output, dpi=300)
                             #input('wait')
 
                 for j in range(len(preds)):
