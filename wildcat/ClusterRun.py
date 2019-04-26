@@ -30,7 +30,7 @@ def main():
 			for test,classif in zip([False,True],[False,True]):
 				# Training or Testing
 				parser = get_parser()
-				parser.set_defaults(data='../data/',i=600,b=8,lrp=0.1,lr=0.01,\
+				parser.set_defaults(data='data/',i=600,b=8,lrp=0.1,lr=0.01,\
 					epochs=20,k=25,maps=8,alpha=0.7,same_kernel=same_kernel,\
 					save_init_model=True,ext=str(i),test=test,classif=classif)
 				args = parser.parse_args()

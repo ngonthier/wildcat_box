@@ -102,7 +102,7 @@ def train_or_test_IconArt_v1(args):
     if args.save_init_model:
         name_init_model= model_name_base+'_initModel.pth.tar'
     else:
-        name_init_model
+        name_init_model = model_name_base
 
     use_gpu = torch.cuda.is_available()
 

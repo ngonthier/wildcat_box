@@ -105,3 +105,4 @@ expes/
 *.out
 tmp/
 *.save
+data/

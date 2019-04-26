@@ -211,7 +211,11 @@ class main_IconArt_v1Classification(data.Dataset):
     def __init__(self, root, set, transform=None, target_transform=None):
         self.root = root
         self.path_devkit = os.path.join(root, 'IconArt_v1')
-        self.path_images = '/media/HDD/data/Wikidata_Paintings/IconArt_v1/JPEGImages/'
+        path_base = '/media/HDD/data/Wikidata_Paintings/'
+        if not(os.path.exists(path_base)):
+            path_base = root
+        self.path_images = path_base+'IconArt_v1/JPEGImages/'
+        
         self.set = set
         self.transform = transform
         self.target_transform = target_transform
@@ -220,7 +224,7 @@ class main_IconArt_v1Classification(data.Dataset):
         #download_voc2007(self.root)
 
         # define path of csv file
-        path_csv = '/media/HDD/data/Wikidata_Paintings/IconArt_v1/ImageSets/Main'
+        path_csv = path_base+'IconArt_v1/ImageSets/Main'
         # define filename of csv file name_file_test = path_data + 'Paintings_Classification_test.csv'
         file_csv = os.path.join(path_csv, 'IconArt_v1_Classification_' + set + '.csv')
 
