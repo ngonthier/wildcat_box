@@ -47,7 +47,10 @@ for db in ['WikiTenLabels']:
 for db in ['IconArt_v1']:
     for split in ['test']:
         name = '{}_{}'.format(db,split)
-        __sets[name] = (lambda split=split, db=db: IconArt_v1(db,split,devkit_path='/media/HDD/data/Wikidata_Paintings/',test_ext=True))
+        devkit_path='/media/HDD/data/Wikidata_Paintings/'
+        if not(os.path.exists(devkit_path)):
+            devkit_path = 'data/'
+        __sets[name] = (lambda split=split, db=db: IconArt_v1(db,split,devkit_path=devkit_path,test_ext=True))
  
 ## Set up coco_2014_<split>
 #for year in ['2014']:
