@@ -157,9 +157,10 @@ class Engine(object):
 
         self.state['best_score'] = 0
 
-    def learning(self, model, criterion, train_dataset, val_dataset, optimizer=None):
+    def learning(self, model, criterion, train_dataset, val_dataset, optimizer=None,
+        name_init_model=''):
 
-        self.init_learning(model, criterion)
+        self.init_learning(model, criterion)      
 
         # define train and val transform
         train_dataset.transform = self.state['train_transform']
@@ -205,6 +206,15 @@ class Engine(object):
         if self.state['evaluate']:
             self.validate(val_loader, model, criterion)
             return
+        
+        if not(name_init_model==''):
+            self.save_checkpoint({
+                'epoch': 0,
+                'arch': self._state('arch'),
+                'state_dict': model.module.state_dict() if self.state['use_gpu'] else model.state_dict(),
+                'best_score': self.state['best_score'],
+            }, False,filename=name_init_model)
+
 
         # TODO define optimizer
 

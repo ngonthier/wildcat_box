@@ -5,6 +5,7 @@ import torch.nn as nn
 
 from wildcat.engine import MultiLabelMAPEngine
 from wildcat.models import resnet101_wildcat
+from wildcat.Attention_models import resnet101_attention
 from wildcat.IconArt_v1 import main_IconArt_v1Classification
 from wildcat.boxesPredict import object_localization
 
@@ -57,12 +58,20 @@ parser.add_argument('--alpha', default=1, type=float,
                     metavar='N', help='weight for the min regions (default: 1)')
 parser.add_argument('--maps', default=1, type=int,
                     metavar='N', help='number of maps per class (default: 1)')
+parser.add_argument('--kernel_size', default=1, type=int,
+                    metavar='N', help='kernel size in the last layer (default: 1)')
 parser.add_argument('--test', action="store_true",
                     help='Use this command to eval the detection performance of the model')
 parser.add_argument('--classif', action="store_true",
                     help='Use this command to eval the classification performance of the model')
 parser.add_argument('--plot', action="store_true",
                     help='Use this command to plot the bounding boxes.')
+parser.add_argument('--att', action="store_true",
+                    help='Use this command to use the attention model.')
+parser.add_argument('--same_kernel', action="store_true",
+                    help='Use this command to have the same kernels weights and biases on all the maps.')
+parser.add_argument('--save_init_model', action="store_true",
+                    help='Use this command to save the model before optimization.')
 
 
 def train_or_test_IconArt_v1():
@@ -72,9 +81,23 @@ def train_or_test_IconArt_v1():
     model_name_base = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
     '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
     '_a'+str(args.alpha)+'_m'+str(args.maps)
+    if args.att:
+        model_name_base = 'model_att'+str(args.image_size)+'_bs'+str(args.batch_size)+\
+        '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_m'+str(args.maps)
+    if args.same_kernel:
+        model_name_base += '_SameKernel'
+    if not(args.kernel_size==1):
+        model_name_base += '_ks'+str(args.kernel_size)
     model_name = model_name_base+'.pth.tar'
 
+    if args.save_init_model:
+        name_init_model= model_name_base+'_initModel.pth.tar'
+    else:
+        name_init_model
+
     use_gpu = torch.cuda.is_available()
+
+    sizeMaps = (args.image_size)//32 +1 # Necessary for the attention model
 
     if not(args.test) and not(args.classif):
         print("Training")
@@ -85,7 +108,12 @@ def train_or_test_IconArt_v1():
         num_classes = 7
 
         # load model
-        model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k, alpha=args.alpha, num_maps=args.maps)
+        if not(args.att):
+            model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
+             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,same_kernel=args.same_kernel)
+        else:
+            model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
+             num_maps=args.maps,kernel_size=args.kernel_size)
 
         # define loss function (criterion)
         criterion = nn.MultiLabelSoftMarginLoss()
@@ -101,7 +129,8 @@ def train_or_test_IconArt_v1():
         state['difficult_examples'] = True
         state['save_model_path'] = 'expes/models/IconArt_v1/'
         engine = MultiLabelMAPEngine(state)
-        engine.learning(model, criterion, train_dataset, val_dataset, optimizer)
+        engine.learning(model, criterion, train_dataset, val_dataset, 
+            optimizer,name_init_model=name_init_model)
 
         # Copy the checkpoint with a new name
         
@@ -122,7 +151,12 @@ def train_or_test_IconArt_v1():
         with_gt = False
         multiscale = False
         num_classes = 7
-        model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k, alpha=args.alpha, num_maps=args.maps)
+        if not(args.att):
+            model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
+             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,same_kernel=args.same_kernel)
+        else:
+            model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
+             num_maps=args.maps,kernel_size=args.kernel_size)
         model.train(False)
         state_dict_all = torch.load(PATH)
         best_epoch = state_dict_all["epoch"]
