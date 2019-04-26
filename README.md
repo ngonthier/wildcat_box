@@ -36,6 +36,7 @@ python3 -m wildcat.demo_mit67 ../data/mit67 --image-size 448 --batch-size 16 --l
 For training :
 ```sh
 python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 0.2 --maps 4 --alpha 0.7
+python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7
 ```
 
 For testing and plot images boxes
