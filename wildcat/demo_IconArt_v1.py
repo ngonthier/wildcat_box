@@ -72,7 +72,8 @@ parser.add_argument('--same_kernel', action="store_true",
                     help='Use this command to have the same kernels weights and biases on all the maps.')
 parser.add_argument('--save_init_model', action="store_true",
                     help='Use this command to save the model before optimization.')
-
+parser.add_argument('--ext', default='', type=str,
+                    help='Extension added to the name of the model saved (default: '')')
 
 def train_or_test_IconArt_v1():
     global args, best_prec1, use_gpu
@@ -88,6 +89,7 @@ def train_or_test_IconArt_v1():
         model_name_base += '_SameKernel'
     if not(args.kernel_size==1):
         model_name_base += '_ks'+str(args.kernel_size)
+    model_name_base += args.ext
     model_name = model_name_base+'.pth.tar'
 
     if args.save_init_model:
