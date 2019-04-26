@@ -25,59 +25,66 @@ from wildcat.util import AveragePrecisionMeter, Warp
 object_categories = ['angel','Child_Jesus', 'crucifixion_of_Jesus',
                     'Mary','nudity', 'ruins','Saint_Sebastien']
 
-parser = argparse.ArgumentParser(description='WILDCAT Training')
-parser.add_argument('data', metavar='DIR',
-                    help='path to dataset (e.g. ../data/')
-parser.add_argument('--image-size', '-i', default=224, type=int,
-                    metavar='N', help='image size (default: 224)')
-parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
-                    help='number of data loading workers (default: 4)')
-parser.add_argument('--epochs', default=20, type=int, metavar='N',
-                    help='number of total epochs to run')
-parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
-                    help='manual epoch number (useful on restarts)')
-parser.add_argument('-b', '--batch-size', default=16, type=int,
-                    metavar='N', help='mini-batch size (default: 256)')
-parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
-                    metavar='LR', help='initial learning rate')
-parser.add_argument('--lrp', '--learning-rate-pretrained', default=0.1, type=float,
-                    metavar='LR', help='learning rate for pre-trained layers')
-parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
-                    help='momentum')
-parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
-                    metavar='W', help='weight decay (default: 1e-4)')
-parser.add_argument('--print-freq', '-p', default=0, type=int,
-                    metavar='N', help='print frequency (default: 10)')
-parser.add_argument('--resume', default='', type=str, metavar='PATH',
-                    help='path to latest checkpoint (default: none)')
-parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
-                    help='evaluate model on validation set')
-parser.add_argument('--k', default=1, type=float,
-                    metavar='N', help='number of regions (default: 1)')
-parser.add_argument('--alpha', default=1, type=float,
-                    metavar='N', help='weight for the min regions (default: 1)')
-parser.add_argument('--maps', default=1, type=int,
-                    metavar='N', help='number of maps per class (default: 1)')
-parser.add_argument('--kernel_size', default=1, type=int,
-                    metavar='N', help='kernel size in the last layer (default: 1)')
-parser.add_argument('--test', action="store_true",
-                    help='Use this command to eval the detection performance of the model')
-parser.add_argument('--classif', action="store_true",
-                    help='Use this command to eval the classification performance of the model')
-parser.add_argument('--plot', action="store_true",
-                    help='Use this command to plot the bounding boxes.')
-parser.add_argument('--att', action="store_true",
-                    help='Use this command to use the attention model.')
-parser.add_argument('--same_kernel', action="store_true",
-                    help='Use this command to have the same kernels weights and biases on all the maps.')
-parser.add_argument('--save_init_model', action="store_true",
-                    help='Use this command to save the model before optimization.')
-parser.add_argument('--ext', default='', type=str,
-                    help='Extension added to the name of the model saved (default: '')')
+def get_parser():
+    parser = argparse.ArgumentParser(description='WILDCAT Training')
+    parser.add_argument('data', metavar='DIR',
+                        help='path to dataset (e.g. ../data/')
+    parser.add_argument('--image-size', '-i', default=224, type=int,
+                        metavar='N', help='image size (default: 224)')
+    parser.add_argument('-j', '--workers', default=4, type=int, metavar='N',
+                        help='number of data loading workers (default: 4)')
+    parser.add_argument('--epochs', default=20, type=int, metavar='N',
+                        help='number of total epochs to run')
+    parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
+                        help='manual epoch number (useful on restarts)')
+    parser.add_argument('-b', '--batch-size', default=16, type=int,
+                        metavar='N', help='mini-batch size (default: 256)')
+    parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
+                        metavar='LR', help='initial learning rate')
+    parser.add_argument('--lrp', '--learning-rate-pretrained', default=0.1, type=float,
+                        metavar='LR', help='learning rate for pre-trained layers')
+    parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
+                        help='momentum')
+    parser.add_argument('--weight-decay', '--wd', default=1e-4, type=float,
+                        metavar='W', help='weight decay (default: 1e-4)')
+    parser.add_argument('--print-freq', '-p', default=0, type=int,
+                        metavar='N', help='print frequency (default: 10)')
+    parser.add_argument('--resume', default='', type=str, metavar='PATH',
+                        help='path to latest checkpoint (default: none)')
+    parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
+                        help='evaluate model on validation set')
+    parser.add_argument('--k', default=1, type=float,
+                        metavar='N', help='number of regions (default: 1)')
+    parser.add_argument('--alpha', default=1, type=float,
+                        metavar='N', help='weight for the min regions (default: 1)')
+    parser.add_argument('--maps', default=1, type=int,
+                        metavar='N', help='number of maps per class (default: 1)')
+    parser.add_argument('--kernel_size', default=1, type=int,
+                        metavar='N', help='kernel size in the last layer (default: 1)')
+    parser.add_argument('--test', action="store_true",
+                        help='Use this command to eval the detection performance of the model')
+    parser.add_argument('--classif', action="store_true",
+                        help='Use this command to eval the classification performance of the model')
+    parser.add_argument('--plot', action="store_true",
+                        help='Use this command to plot the bounding boxes.')
+    parser.add_argument('--att', action="store_true",
+                        help='Use this command to use the attention model.')
+    parser.add_argument('--same_kernel', action="store_true",
+                        help='Use this command to have the same kernels weights and biases on all the maps.')
+    parser.add_argument('--save_init_model', action="store_true",
+                        help='Use this command to save the model before optimization.')
+    parser.add_argument('--ext', default='', type=str,
+                        help='Extension added to the name of the model saved (default: '')')
+    return(parser)
 
-def train_or_test_IconArt_v1():
+def main():
     global args, best_prec1, use_gpu
+    parser = get_parser()
     args = parser.parse_args()
+    train_or_test_IconArt_v1(args)
+
+def train_or_test_IconArt_v1(args):
+    
 
     model_name_base = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
     '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
@@ -333,7 +340,8 @@ def train_or_test_IconArt_v1():
 
 
 if __name__ == '__main__':
-    train_or_test_IconArt_v1()
+    main()
+    #train_or_test_IconArt_v1()
     #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 10 --k 1 --maps 1 --alpha 0.0 --test --classif
     #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7 --test --classif
     #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 448 --batch-size 16 --lrp 0.1 --lr 0.01 --epochs 20 --k 20 --maps 8 --alpha 0.7 --test --classif
