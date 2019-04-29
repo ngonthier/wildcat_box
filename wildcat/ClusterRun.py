@@ -30,9 +30,10 @@ def main():
 			for test,classif in zip([False,True],[False,True]):
 				# Training or Testing
 				parser = get_parser()
-				parser.set_defaults(data='data/',i=600,b=8,lrp=0.1,lr=0.01,\
+				ext ='_'+str(i)
+				parser.set_defaults(data='data/',image_size=600,batch_size=8,lrp=0.1,lr=0.01,\
 					epochs=20,k=25,maps=8,alpha=0.7,same_kernel=same_kernel,\
-					save_init_model=True,ext=str(i),test=test,classif=classif)
+					save_init_model=True,ext=ext,test=test,classif=classif)
 				args = parser.parse_args()
 				train_or_test_IconArt_v1(args)
     
