@@ -1,0 +1,676 @@
+Training
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+=> no checkpoint found at ''
+save model expes/models/IconArt_v1/model_im224_bs16_lrp0.1_lr0.01_ep20_k25_a0.7_m80_initModel.pth.tar
+Epoch: [0]	Loss 0.3294	mAP 43.824
+Test: 	 Loss 0.2310	 mAP 72.117
+For Each class:  tensor([ 61.5319,  89.8802,  58.7115,  94.1537,  84.1433,  91.4481,
+         24.9475])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=72.117
+Epoch: [1]	Loss 0.2437	mAP 65.463
+Test: 	 Loss 0.1594	 mAP 81.477
+For Each class:  tensor([ 73.9734,  95.4420,  80.0188,  97.4264,  91.6557,  92.2175,
+         39.6066])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=81.477
+Epoch: [2]	Loss 0.1908	mAP 76.001
+Test: 	 Loss 0.1138	 mAP 88.682
+For Each class:  tensor([ 88.3297,  97.5994,  91.3863,  98.6460,  95.7209,  97.3356,
+         51.7548])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=88.682
+Epoch: [3]	Loss 0.1550	mAP 83.526
+Test: 	 Loss 0.0866	 mAP 92.280
+For Each class:  tensor([ 92.8145,  98.5181,  95.4911,  99.2100,  97.6781,  98.3001,
+         63.9501])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=92.280
+Epoch: [4]	Loss 0.1330	mAP 86.655
+Test: 	 Loss 0.0659	 mAP 93.414
+For Each class:  tensor([ 97.8645,  98.4387,  96.8410,  99.4848,  98.8677,  99.3069,
+         63.0946])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=93.414
+Epoch: [5]	Loss 0.1066	mAP 90.916
+Test: 	 Loss 0.0741	 mAP 94.828
+For Each class:  tensor([ 97.7965,  99.2531,  98.3333,  99.5830,  98.2020,  99.6549,
+         70.9756])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=94.828
+Epoch: [6]	Loss 0.0872	mAP 93.944
+Test: 	 Loss 0.0378	 mAP 96.740
+For Each class:  tensor([ 98.9968,  99.6390,  99.2517,  99.6483,  99.4914,  99.5525,
+         80.6014])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=96.740
+Epoch: [7]	Loss 0.0741	mAP 95.083
+Test: 	 Loss 0.0405	 mAP 97.937
+For Each class:  tensor([ 98.7973,  99.4661,  99.6430,  99.6523,  99.6121,  99.8964,
+         88.4946])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=97.937
+Epoch: [8]	Loss 0.0688	mAP 96.983
+Test: 	 Loss 0.0282	 mAP 98.908
+For Each class:  tensor([ 99.8181,  99.7058,  99.7072,  99.9247,  99.5184,  99.8864,
+         93.7926])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=98.908
+Epoch: [9]	Loss 0.0557	mAP 97.179
+Test: 	 Loss 0.0265	 mAP 99.378
+For Each class:  tensor([ 99.6591,  99.7940,  99.7150,  99.9195,  99.6654,  99.8334,
+         97.0573])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.378
+Epoch: [10]	Loss 0.0523	mAP 98.553
+Test: 	 Loss 0.0207	 mAP 99.542
+For Each class:  tensor([ 99.9041,  99.6325,  99.8602,  99.9483,  99.9548,  99.5026,
+         97.9905])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.542
+Epoch: [11]	Loss 0.0453	mAP 98.862
+Test: 	 Loss 0.0185	 mAP 99.916
+For Each class:  tensor([ 99.9267,  99.7765,  99.9174,  99.9357,  99.9049,  99.9893,
+         99.9647])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.916
+Epoch: [12]	Loss 0.0434	mAP 98.860
+Test: 	 Loss 0.0201	 mAP 99.907
+For Each class:  tensor([ 99.5913,  99.9452,  99.9601,  99.9617,  99.9148,  99.9964,
+         99.9825])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.916
+Epoch: [13]	Loss 0.0401	mAP 99.409
+Test: 	 Loss 0.0103	 mAP 99.960
+For Each class:  tensor([ 99.9347,  99.9812,  99.8857,  99.9879,  99.9510,  99.9964,
+         99.9825])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.960
+Epoch: [14]	Loss 0.0384	mAP 99.296
+Test: 	 Loss 0.0194	 mAP 99.904
+For Each class:  tensor([  99.8941,   99.9696,   99.9473,   99.9585,   99.9581,  100.0000,
+          99.5972])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.960
+Epoch: [15]	Loss 0.0350	mAP 99.329
+Test: 	 Loss 0.0072	 mAP 99.745
+For Each class:  tensor([  99.9997,   99.9972,  100.0000,   99.9790,   99.9954,   99.9909,
+          98.2520])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.960
+Epoch: [16]	Loss 0.0355	mAP 99.347
+Test: 	 Loss 0.0083	 mAP 99.920
+For Each class:  tensor([  99.9592,   99.9935,  100.0000,   99.9819,   99.9997,  100.0000,
+          99.5075])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.960
+Epoch: [17]	Loss 0.0308	mAP 99.484
+Test: 	 Loss 0.0070	 mAP 99.960
+For Each class:  tensor([  99.9682,   99.9996,  100.0000,   99.9981,   99.9941,  100.0000,
+          99.7610])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.960
+Epoch: [18]	Loss 0.0274	mAP 99.754
+Test: 	 Loss 0.0049	 mAP 99.996
+For Each class:  tensor([  99.9849,   99.9986,  100.0000,   99.9946,   99.9909,  100.0000,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.996
+Epoch: [19]	Loss 0.0266	mAP 99.668
+Test: 	 Loss 0.0063	 mAP 99.986
+For Each class:  tensor([  99.9919,  100.0000,  100.0000,   99.9999,   99.9082,  100.0000,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.996
+Testing detection
+=== WILDCAT detections  ===
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_test.csv
+[dataset] IconArt_v1 classification set=test number of classes=7  number of images=2977
+Test: 	 Loss 0.3857	 mAP 74.934
+For Each class:  tensor([ 66.6138,  86.6334,  84.3420,  90.0564,  82.0629,  76.3200,
+         38.5103])
+0  :  data/IconArt_v1/JPEGImages/Q26706642.jpg
+500  :  data/IconArt_v1/JPEGImages/Q369582.jpg
+1000  :  data/IconArt_v1/JPEGImages/Q18916190.jpg
+Detection score (thres = 0.5):  IconArt_v1_test
+ & 0.0 & 0.0 & 12.1 & 1.6 & 0.3 & 0.6 & 0.2 & 2.1 \\ \hline
+AP for angel = 0.0007
+AP for Child_Jesus = 0.0368
+AP for crucifixion_of_Jesus = 0.3990
+AP for Mary = 0.1962
+AP for nudity = 0.0474
+AP for ruins = 0.1153
+AP for Saint_Sebastien = 0.0279
+Mean AP = 0.1176
+Detection score with thres at  0.3
+ & 0.1 & 3.7 & 39.9 & 19.6 & 4.7 & 11.5 & 2.8 & 11.8 \\ \hline
+AP for angel = 0.0146
+AP for Child_Jesus = 0.2943
+AP for crucifixion_of_Jesus = 0.6042
+AP for Mary = 0.3949
+AP for nudity = 0.1863
+AP for ruins = 0.2584
+AP for Saint_Sebastien = 0.2377
+Mean AP = 0.2844
+Detection score with thres at  0.1
+ & 1.5 & 29.4 & 60.4 & 39.5 & 18.6 & 25.8 & 23.8 & 28.4 \\ \hline
+AP for angel = 0.0752
+AP for Child_Jesus = 0.5711
+AP for crucifixion_of_Jesus = 0.6926
+AP for Mary = 0.5661
+AP for nudity = 0.2807
+AP for ruins = 0.3303
+AP for Saint_Sebastien = 0.2885
+Mean AP = 0.4006
+Detection score with thres at  0.0
+ & 7.5 & 57.1 & 69.3 & 56.6 & 28.1 & 33.0 & 28.9 & 40.1 \\ \hline
+Training
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+=> no checkpoint found at ''
+save model expes/models/IconArt_v1/model_im224_bs16_lrp0.1_lr0.01_ep20_k25_a0.7_m81_initModel.pth.tar
+Epoch: [0]	Loss 0.3284	mAP 44.173
+Test: 	 Loss 0.2467	 mAP 70.605
+For Each class:  tensor([ 60.6163,  89.7268,  49.0458,  94.1927,  85.2005,  90.9951,
+         24.4575])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=70.605
+Epoch: [1]	Loss 0.2376	mAP 64.599
+Test: 	 Loss 0.1561	 mAP 82.154
+For Each class:  tensor([ 76.7574,  95.7632,  81.9084,  97.6642,  92.8042,  96.4984,
+         33.6790])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=82.154
+Epoch: [2]	Loss 0.1868	mAP 77.221
+Test: 	 Loss 0.1205	 mAP 87.390
+For Each class:  tensor([ 85.8374,  97.2394,  90.7701,  98.2722,  96.8712,  97.5360,
+         45.2055])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=87.390
+Epoch: [3]	Loss 0.1545	mAP 84.204
+Test: 	 Loss 0.0945	 mAP 92.672
+For Each class:  tensor([ 93.3587,  98.7232,  95.5309,  99.1741,  98.1974,  99.2921,
+         64.4258])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=92.672
+Epoch: [4]	Loss 0.1248	mAP 87.544
+Test: 	 Loss 0.0805	 mAP 93.042
+For Each class:  tensor([ 96.9386,  98.5533,  97.4618,  99.1608,  98.5099,  99.5318,
+         61.1360])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=93.042
+Epoch: [5]	Loss 0.1053	mAP 90.521
+Test: 	 Loss 0.0679	 mAP 95.380
+For Each class:  tensor([ 98.3005,  99.2714,  97.6100,  99.5875,  99.3058,  99.4379,
+         74.1490])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=95.380
+Epoch: [6]	Loss 0.0979	mAP 91.587
+Test: 	 Loss 0.0537	 mAP 96.340
+For Each class:  tensor([ 98.1460,  99.5018,  99.7141,  99.7276,  99.6386,  99.8161,
+         77.8355])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=96.340
+Epoch: [7]	Loss 0.0760	mAP 95.431
+Test: 	 Loss 0.0438	 mAP 97.755
+For Each class:  tensor([ 98.6840,  99.4383,  99.7025,  99.8915,  99.6181,  99.9255,
+         87.0273])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=97.755
+Epoch: [8]	Loss 0.0695	mAP 96.953
+Test: 	 Loss 0.0310	 mAP 98.862
+For Each class:  tensor([ 98.8145,  99.4954,  99.9075,  99.9046,  99.8012,  99.9928,
+         94.1197])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=98.862
+Epoch: [9]	Loss 0.0592	mAP 97.079
+Test: 	 Loss 0.0299	 mAP 99.555
+For Each class:  tensor([ 99.8743,  99.6137,  99.9341,  99.9265,  99.7876,  99.9129,
+         97.8375])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.555
+Epoch: [10]	Loss 0.0564	mAP 98.274
+Test: 	 Loss 0.0292	 mAP 99.462
+For Each class:  tensor([  99.4599,   99.7788,  100.0000,   99.8371,   99.9022,   99.9390,
+          97.3167])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.555
+Epoch: [11]	Loss 0.0499	mAP 98.577
+Test: 	 Loss 0.0178	 mAP 99.877
+For Each class:  tensor([  99.9252,   99.9813,  100.0000,   99.9782,   99.9754,  100.0000,
+          99.2815])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.877
+Epoch: [12]	Loss 0.0492	mAP 98.948
+Test: 	 Loss 0.0116	 mAP 99.691
+For Each class:  tensor([  99.9211,   99.9422,  100.0000,   99.9706,   99.9755,  100.0000,
+          98.0288])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.877
+Epoch: [13]	Loss 0.0427	mAP 98.807
+Test: 	 Loss 0.0069	 mAP 99.983
+For Each class:  tensor([  99.9684,   99.9944,  100.0000,   99.9952,   99.9919,  100.0000,
+          99.9284])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.983
+Epoch: [14]	Loss 0.0382	mAP 99.399
+Test: 	 Loss 0.0092	 mAP 99.906
+For Each class:  tensor([  99.8918,   99.9856,  100.0000,   99.9915,   99.9776,  100.0000,
+          99.4945])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.983
+Epoch: [15]	Loss 0.0378	mAP 99.192
+Test: 	 Loss 0.0105	 mAP 99.974
+For Each class:  tensor([  99.8488,   99.9864,  100.0000,   99.9929,   99.9947,   99.9964,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.983
+Epoch: [16]	Loss 0.0298	mAP 99.623
+Test: 	 Loss 0.0047	 mAP 99.987
+For Each class:  tensor([  99.9981,   99.9930,  100.0000,   99.9737,   99.9998,  100.0000,
+          99.9476])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.987
+Epoch: [17]	Loss 0.0306	mAP 99.652
+Test: 	 Loss 0.0065	 mAP 99.985
+For Each class:  tensor([  99.9792,   99.9981,  100.0000,   99.9370,   99.9983,  100.0000,
+          99.9825])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.987
+Epoch: [18]	Loss 0.0257	mAP 99.686
+Test: 	 Loss 0.0054	 mAP 99.995
+For Each class:  tensor([  99.9962,   99.9998,  100.0000,   99.9988,   99.9910,  100.0000,
+          99.9825])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.995
+Epoch: [19]	Loss 0.0298	mAP 99.774
+Test: 	 Loss 0.0053	 mAP 99.980
+For Each class:  tensor([  99.8965,   99.9924,  100.0000,   99.9996,   99.9901,  100.0000,
+          99.9825])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.995
+Testing detection
+=== WILDCAT detections  ===
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_test.csv
+[dataset] IconArt_v1 classification set=test number of classes=7  number of images=2977
+Test: 	 Loss 0.3492	 mAP 74.533
+For Each class:  tensor([ 67.8095,  85.8743,  81.6791,  88.9964,  83.9455,  73.9406,
+         39.4883])
+0  :  data/IconArt_v1/JPEGImages/Q26706642.jpg
+500  :  data/IconArt_v1/JPEGImages/Q369582.jpg
+1000  :  data/IconArt_v1/JPEGImages/Q18916190.jpg
+Detection score (thres = 0.5):  IconArt_v1_test
+ & 0.0 & 0.3 & 5.0 & 2.3 & 0.2 & 0.7 & 0.0 & 1.2 \\ \hline
+AP for angel = 0.0025
+AP for Child_Jesus = 0.0466
+AP for crucifixion_of_Jesus = 0.3748
+AP for Mary = 0.1797
+AP for nudity = 0.0508
+AP for ruins = 0.0966
+AP for Saint_Sebastien = 0.0189
+Mean AP = 0.1100
+Detection score with thres at  0.3
+ & 0.2 & 4.7 & 37.5 & 18.0 & 5.1 & 9.7 & 1.9 & 11.0 \\ \hline
+AP for angel = 0.0226
+AP for Child_Jesus = 0.3006
+AP for crucifixion_of_Jesus = 0.6110
+AP for Mary = 0.4243
+AP for nudity = 0.1931
+AP for ruins = 0.2139
+AP for Saint_Sebastien = 0.2737
+Mean AP = 0.2913
+Detection score with thres at  0.1
+ & 2.3 & 30.1 & 61.1 & 42.4 & 19.3 & 21.4 & 27.4 & 29.1 \\ \hline
+AP for angel = 0.0839
+AP for Child_Jesus = 0.5838
+AP for crucifixion_of_Jesus = 0.7041
+AP for Mary = 0.6000
+AP for nudity = 0.3024
+AP for ruins = 0.2995
+AP for Saint_Sebastien = 0.3641
+Mean AP = 0.4197
+Detection score with thres at  0.0
+ & 8.4 & 58.4 & 70.4 & 60.0 & 30.2 & 29.9 & 36.4 & 42.0 \\ \hline
+Training
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+=> no checkpoint found at ''
+save model expes/models/IconArt_v1/model_im224_bs16_lrp0.1_lr0.01_ep20_k25_a0.7_m8_SameKernel0_initModel.pth.tar
+Epoch: [0]	Loss 0.3297	mAP 43.921
+Test: 	 Loss 0.2361	 mAP 69.678
+For Each class:  tensor([ 57.4373,  90.1855,  60.0146,  93.0704,  84.4985,  89.3276,
+         13.2127])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=69.678
+Epoch: [1]	Loss 0.2433	mAP 64.496
+Test: 	 Loss 0.1884	 mAP 81.252
+For Each class:  tensor([ 72.5683,  94.3914,  84.0869,  96.8595,  89.8474,  95.0576,
+         35.9534])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=81.252
+Epoch: [2]	Loss 0.1943	mAP 76.191
+Test: 	 Loss 0.1187	 mAP 89.185
+For Each class:  tensor([ 87.6902,  97.4765,  93.2278,  98.1475,  96.2568,  98.0576,
+         53.4395])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=89.185
+Epoch: [3]	Loss 0.1543	mAP 83.410
+Test: 	 Loss 0.1026	 mAP 91.373
+For Each class:  tensor([ 91.5343,  98.4547,  95.8627,  98.8662,  97.8093,  98.5978,
+         58.4832])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=91.373
+Epoch: [4]	Loss 0.1322	mAP 86.615
+Test: 	 Loss 0.0715	 mAP 93.677
+For Each class:  tensor([ 96.4992,  99.0050,  96.8026,  99.4993,  98.5885,  99.2948,
+         66.0498])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=93.677
+Epoch: [5]	Loss 0.1029	mAP 91.110
+Test: 	 Loss 0.0953	 mAP 94.288
+For Each class:  tensor([ 98.4099,  98.5701,  98.8595,  99.6268,  98.4481,  99.8088,
+         66.2920])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=94.288
+Epoch: [6]	Loss 0.0947	mAP 92.919
+Test: 	 Loss 0.0392	 mAP 98.145
+For Each class:  tensor([ 99.4794,  99.5001,  99.5141,  99.8404,  99.6476,  99.9458,
+         89.0861])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=98.145
+Epoch: [7]	Loss 0.0803	mAP 95.646
+Test: 	 Loss 0.0328	 mAP 98.394
+For Each class:  tensor([ 99.6483,  99.6315,  99.5423,  99.8282,  99.5077,  99.9800,
+         90.6206])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=98.394
+Epoch: [8]	Loss 0.0675	mAP 96.839
+Test: 	 Loss 0.0285	 mAP 99.469
+For Each class:  tensor([  99.4710,   99.8665,   99.9043,   99.8835,   99.8938,  100.0000,
+          97.2653])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.469
+Epoch: [9]	Loss 0.0659	mAP 97.468
+Test: 	 Loss 0.0237	 mAP 99.544
+For Each class:  tensor([ 99.8953,  99.8715,  99.6115,  99.9412,  99.8981,  99.9982,
+         97.5907])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.544
+Epoch: [10]	Loss 0.0543	mAP 98.419
+Test: 	 Loss 0.0168	 mAP 99.546
+For Each class:  tensor([ 99.9081,  99.9003,  98.4302,  99.9537,  99.9138,  99.9815,
+         98.7375])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.546
+Epoch: [11]	Loss 0.0510	mAP 98.475
+Test: 	 Loss 0.0151	 mAP 99.719
+For Each class:  tensor([  99.9000,   99.9608,   99.8828,   99.9596,   99.9515,  100.0000,
+          98.3773])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.719
+Epoch: [12]	Loss 0.0369	mAP 99.142
+Test: 	 Loss 0.0104	 mAP 99.912
+For Each class:  tensor([  99.9941,   99.9885,   99.8898,   99.8804,   99.9915,  100.0000,
+          99.6374])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.912
+Epoch: [13]	Loss 0.0370	mAP 99.325
+Test: 	 Loss 0.0070	 mAP 99.996
+For Each class:  tensor([  99.9983,   99.9928,  100.0000,   99.9899,   99.9938,  100.0000,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.996
+Epoch: [14]	Loss 0.0315	mAP 99.523
+Test: 	 Loss 0.0061	 mAP 99.997
+For Each class:  tensor([  99.9832,   99.9958,  100.0000,   99.9989,   99.9998,  100.0000,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.997
+Epoch: [15]	Loss 0.0263	mAP 99.592
+Test: 	 Loss 0.0081	 mAP 99.839
+For Each class:  tensor([  99.9817,   99.9996,  100.0000,   99.9802,   99.9876,   99.9909,
+          98.9320])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.997
+Epoch: [16]	Loss 0.0328	mAP 99.590
+Test: 	 Loss 0.0066	 mAP 99.970
+For Each class:  tensor([  99.9523,   99.9932,  100.0000,   99.9981,   99.9998,  100.0000,
+          99.8450])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.997
+Epoch: [17]	Loss 0.0242	mAP 99.829
+Test: 	 Loss 0.0058	 mAP 99.995
+For Each class:  tensor([  99.9902,   99.9947,  100.0000,   99.9996,   99.9836,  100.0000,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.997
+Epoch: [18]	Loss 0.0254	mAP 99.671
+Test: 	 Loss 0.0041	 mAP 99.993
+For Each class:  tensor([  99.9959,   99.9989,  100.0000,   99.9877,   99.9874,  100.0000,
+          99.9825])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.997
+Epoch: [19]	Loss 0.0216	mAP 99.682
+Test: 	 Loss 0.0056	 mAP 99.969
+For Each class:  tensor([  99.9938,  100.0000,  100.0000,   99.9957,   99.9417,  100.0000,
+          99.8550])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.997
+Testing detection
+=== WILDCAT detections  ===
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_test.csv
+[dataset] IconArt_v1 classification set=test number of classes=7  number of images=2977
+Test: 	 Loss 0.3697	 mAP 74.311
+For Each class:  tensor([ 65.4305,  84.9947,  85.5781,  89.1593,  82.1577,  74.9034,
+         37.9522])
+0  :  data/IconArt_v1/JPEGImages/Q26706642.jpg
+500  :  data/IconArt_v1/JPEGImages/Q369582.jpg
+1000  :  data/IconArt_v1/JPEGImages/Q18916190.jpg
+Detection score (thres = 0.5):  IconArt_v1_test
+ & 0.0 & 0.3 & 13.9 & 1.9 & 0.2 & 1.5 & 0.0 & 2.5 \\ \hline
+AP for angel = 0.0009
+AP for Child_Jesus = 0.0431
+AP for crucifixion_of_Jesus = 0.4224
+AP for Mary = 0.1736
+AP for nudity = 0.0386
+AP for ruins = 0.1383
+AP for Saint_Sebastien = 0.0127
+Mean AP = 0.1185
+Detection score with thres at  0.3
+ & 0.1 & 4.3 & 42.2 & 17.4 & 3.9 & 13.8 & 1.3 & 11.9 \\ \hline
+AP for angel = 0.0190
+AP for Child_Jesus = 0.2727
+AP for crucifixion_of_Jesus = 0.6134
+AP for Mary = 0.4106
+AP for nudity = 0.1563
+AP for ruins = 0.2615
+AP for Saint_Sebastien = 0.1415
+Mean AP = 0.2679
+Detection score with thres at  0.1
+ & 1.9 & 27.3 & 61.3 & 41.1 & 15.6 & 26.2 & 14.2 & 26.8 \\ \hline
+AP for angel = 0.0767
+AP for Child_Jesus = 0.5503
+AP for crucifixion_of_Jesus = 0.7296
+AP for Mary = 0.6050
+AP for nudity = 0.2353
+AP for ruins = 0.3247
+AP for Saint_Sebastien = 0.1671
+Mean AP = 0.3841
+Detection score with thres at  0.0
+ & 7.7 & 55.0 & 73.0 & 60.5 & 23.5 & 32.5 & 16.7 & 38.4 \\ \hline
+Training
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_trainval.csv
+[dataset] IconArt_v1 classification set=trainval number of classes=7  number of images=2978
+=> no checkpoint found at ''
+save model expes/models/IconArt_v1/model_im224_bs16_lrp0.1_lr0.01_ep20_k25_a0.7_m8_SameKernel1_initModel.pth.tar
+Epoch: [0]	Loss 0.3292	mAP 43.434
+Test: 	 Loss 0.2183	 mAP 69.469
+For Each class:  tensor([ 57.9510,  91.4102,  50.4538,  94.5070,  85.6392,  91.6938,
+         14.6275])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=69.469
+Epoch: [1]	Loss 0.2367	mAP 65.793
+Test: 	 Loss 0.1800	 mAP 82.027
+For Each class:  tensor([ 74.0300,  95.7650,  83.5526,  97.2235,  92.1550,  95.5165,
+         35.9431])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=82.027
+Epoch: [2]	Loss 0.1936	mAP 76.428
+Test: 	 Loss 0.1206	 mAP 87.783
+For Each class:  tensor([ 87.5185,  96.7948,  91.5275,  98.4462,  95.6404,  97.1750,
+         47.3769])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=87.783
+Epoch: [3]	Loss 0.1608	mAP 82.954
+Test: 	 Loss 0.1012	 mAP 91.635
+For Each class:  tensor([ 93.0414,  97.6263,  95.8734,  98.5309,  97.5250,  97.8589,
+         60.9889])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=91.635
+Epoch: [4]	Loss 0.1276	mAP 87.924
+Test: 	 Loss 0.0834	 mAP 94.173
+For Each class:  tensor([ 96.6639,  98.6244,  97.7860,  99.1106,  98.3679,  98.7888,
+         69.8694])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=94.173
+Epoch: [5]	Loss 0.1048	mAP 91.905
+Test: 	 Loss 0.0691	 mAP 94.598
+For Each class:  tensor([ 98.8146,  99.3808,  99.7884,  99.6362,  99.2780,  99.8537,
+         65.4335])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=94.598
+Epoch: [6]	Loss 0.0979	mAP 93.012
+Test: 	 Loss 0.0351	 mAP 97.782
+For Each class:  tensor([ 98.8901,  99.6339,  99.0108,  99.8696,  99.7073,  99.8368,
+         87.5253])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=97.782
+Epoch: [7]	Loss 0.0808	mAP 95.539
+Test: 	 Loss 0.0412	 mAP 98.772
+For Each class:  tensor([ 98.9470,  99.6319,  99.7324,  99.9272,  99.4726,  99.8591,
+         93.8365])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=98.772
+Epoch: [8]	Loss 0.0719	mAP 97.368
+Test: 	 Loss 0.0219	 mAP 99.536
+For Each class:  tensor([ 99.6770,  99.6828,  99.9464,  99.9162,  99.9367,  99.9410,
+         97.6536])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.536
+Epoch: [9]	Loss 0.0576	mAP 98.193
+Test: 	 Loss 0.0274	 mAP 99.638
+For Each class:  tensor([ 99.7976,  99.4829,  99.9736,  99.8423,  99.4798,  99.9945,
+         98.8937])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.638
+Epoch: [10]	Loss 0.0558	mAP 98.340
+Test: 	 Loss 0.0182	 mAP 99.575
+For Each class:  tensor([ 99.7012,  99.9013,  99.9594,  99.9120,  99.9398,  99.9539,
+         97.6565])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.638
+Epoch: [11]	Loss 0.0498	mAP 98.571
+Test: 	 Loss 0.0221	 mAP 99.698
+For Each class:  tensor([ 99.4869,  99.9177,  99.9731,  99.8983,  99.8906,  99.9819,
+         98.7406])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.698
+Epoch: [12]	Loss 0.0480	mAP 99.103
+Test: 	 Loss 0.0169	 mAP 99.715
+For Each class:  tensor([  99.7847,   99.9366,   99.9866,   99.8908,   99.8867,  100.0000,
+          98.5216])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.715
+Epoch: [13]	Loss 0.0463	mAP 98.914
+Test: 	 Loss 0.0205	 mAP 99.542
+For Each class:  tensor([  99.8380,   99.9846,  100.0000,   99.8970,   99.9734,   99.9764,
+          97.1216])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.715
+Epoch: [14]	Loss 0.0363	mAP 99.051
+Test: 	 Loss 0.0112	 mAP 99.843
+For Each class:  tensor([ 99.9567,  99.9304,  99.9608,  99.9496,  99.9928,  99.9982,
+         99.1152])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.843
+Epoch: [15]	Loss 0.0322	mAP 99.470
+Test: 	 Loss 0.0121	 mAP 99.727
+For Each class:  tensor([  99.9958,   99.9825,  100.0000,   99.9380,   99.9934,  100.0000,
+          98.1817])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.843
+Epoch: [16]	Loss 0.0403	mAP 99.269
+Test: 	 Loss 0.0097	 mAP 99.869
+For Each class:  tensor([ 100.0000,   99.9595,   99.9866,   99.9715,   99.9710,  100.0000,
+          99.1951])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.869
+Epoch: [17]	Loss 0.0437	mAP 99.086
+Test: 	 Loss 0.0079	 mAP 99.979
+For Each class:  tensor([  99.9896,   99.9923,  100.0000,   99.9457,   99.9944,   99.9855,
+          99.9487])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.979
+Epoch: [18]	Loss 0.0348	mAP 99.571
+Test: 	 Loss 0.0059	 mAP 99.993
+For Each class:  tensor([  99.9669,   99.9865,  100.0000,   99.9977,   99.9986,  100.0000,
+         100.0000])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.993
+Epoch: [19]	Loss 0.0350	mAP 99.430
+Test: 	 Loss 0.0065	 mAP 99.981
+For Each class:  tensor([  99.9911,   99.9995,  100.0000,   99.9983,   99.9912,   99.9718,
+          99.9167])
+save model expes/models/IconArt_v1/checkpoint.pth.tar
+ *** best=99.993
+Testing detection
+=== WILDCAT detections  ===
+[dataset] read data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_test.csv
+[dataset] IconArt_v1 classification set=test number of classes=7  number of images=2977
+Test: 	 Loss 0.3863	 mAP 74.006
+For Each class:  tensor([ 64.7644,  87.0617,  83.7923,  88.7753,  82.0371,  73.5355,
+         38.0784])
+0  :  data/IconArt_v1/JPEGImages/Q26706642.jpg
+500  :  data/IconArt_v1/JPEGImages/Q369582.jpg
+1000  :  data/IconArt_v1/JPEGImages/Q18916190.jpg
+Detection score (thres = 0.5):  IconArt_v1_test
+ & 0.0 & 0.1 & 6.9 & 1.3 & 0.2 & 0.9 & 0.0 & 1.4 \\ \hline
+AP for angel = 0.0006
+AP for Child_Jesus = 0.0333
+AP for crucifixion_of_Jesus = 0.4051
+AP for Mary = 0.1633
+AP for nudity = 0.0411
+AP for ruins = 0.1016
+AP for Saint_Sebastien = 0.0260
+Mean AP = 0.1101
+Detection score with thres at  0.3
+ & 0.1 & 3.3 & 40.5 & 16.3 & 4.1 & 10.2 & 2.6 & 11.0 \\ \hline
+AP for angel = 0.0138
+AP for Child_Jesus = 0.2840
+AP for crucifixion_of_Jesus = 0.5968
+AP for Mary = 0.3954
+AP for nudity = 0.1754
+AP for ruins = 0.2387
+AP for Saint_Sebastien = 0.1918
+Mean AP = 0.2708
+Detection score with thres at  0.1
+ & 1.4 & 28.4 & 59.7 & 39.5 & 17.5 & 23.9 & 19.2 & 27.1 \\ \hline
+AP for angel = 0.0680
+AP for Child_Jesus = 0.6027
+AP for crucifixion_of_Jesus = 0.6681
+AP for Mary = 0.5674
+AP for nudity = 0.2715
+AP for ruins = 0.3266
+AP for Saint_Sebastien = 0.2774
+Mean AP = 0.3974
+Detection score with thres at  0.0
+ & 6.8 & 60.3 & 66.8 & 56.7 & 27.1 & 32.7 & 27.7 & 39.7 \\ \hline

@@ -106,3 +106,4 @@ expes/
 tmp/
 *.save
 data/
+*.pyc

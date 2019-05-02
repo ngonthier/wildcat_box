@@ -341,7 +341,7 @@ def train_or_test_IconArt_v1(args):
 if __name__ == '__main__':
     main()
     #train_or_test_IconArt_v1()
-    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 10 --k 1 --maps 1 --alpha 0.0 --test --classif
-    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 600 --batch-size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7 --test --classif
-    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image-size 448 --batch-size 16 --lrp 0.1 --lr 0.01 --epochs 20 --k 20 --maps 8 --alpha 0.7 --test --classif
+    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image_size 600 --batch_size 8 --lrp 0.1 --lr 0.01 --epochs 10 --k 1 --maps 1 --alpha 0.0 --test --classif
+    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image_size 600 --batch_size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7 --test --classif
+    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image_size 448 --batch_size 16 --lrp 0.1 --lr 0.01 --epochs 20 --k 20 --maps 8 --alpha 0.7 --test --classif
 
