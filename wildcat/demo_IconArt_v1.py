@@ -88,6 +88,7 @@ def train_or_test_IconArt_v1(args):
     model_name_base = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
     '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
     '_a'+str(args.alpha)+'_m'+str(args.maps)
+    
     if args.att:
         model_name_base = 'model_att'+str(args.image_size)+'_bs'+str(args.batch_size)+\
         '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_m'+str(args.maps)
