@@ -93,11 +93,11 @@ class DirectMaxPlusAlphaMinPool2dFunction(Function):
             return int(k)
 
     def forward(self, input):
-		
-		kmax = self.get_positive_k(self.kmax, n)
+        
+        kmax = self.get_positive_k(self.kmax, n)
         kmin = self.get_positive_k(self.kmin, n)
-		
-		batch_size, num_channels, h, w = input.size()
+        
+        batch_size, num_channels, h, w = input.size()
 
         if num_channels % self.num_maps != 0:
             print('Error in ClassWisePoolFunction. The number of channels has to be a multiple of the number of maps per class')
@@ -221,8 +221,8 @@ class LCPPoolFunction(Function):
     def __init__(self, num_maps,kernel_size=1):
         super(ClassWisePoolFunction, self).__init__()
         self.num_maps = num_maps
-		self.kernel_size = kernel_size
-		
+        self.kernel_size = kernel_size
+        
     def forward(self, input):
         # batch dimension
         batch_size, num_channels, h, w = input.size()

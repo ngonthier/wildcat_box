@@ -76,7 +76,7 @@ def get_parser():
     parser.add_argument('--ext', default='', type=str,
                         help='Extension added to the name of the model saved (default: '')')
     parser.add_argument('--mode', default='', type=str,
-						choices=['','Direct','LCP'],
+                        choices=['','Direct','LCP'],
                         help='Modification of the default WILDCAT algo to have different kernel learned (default: '')')
     return(parser)
 
@@ -93,7 +93,7 @@ def train_or_test_IconArt_v1(args):
     '_a'+str(args.alpha)+'_m'+str(args.maps)
     
     if not(args.mode==''):
-		model_name_base += args.mode
+        model_name_base += args.mode
     
     if args.att:
         model_name_base = 'model_att'+str(args.image_size)+'_bs'+str(args.batch_size)+\
