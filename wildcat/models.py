@@ -3,7 +3,7 @@ import torchvision.models as models
 import torch
 import numpy as np
 
-from wildcat.pooling import WildcatPool2d, ClassWisePool
+from wildcat.pooling import WildcatPool2d, ClassWisePool, DirectMaxPlusAlphaMinPool2d
 
 def tile(a, dim, n_tile):
     init_dim = a.size(dim)
@@ -71,8 +71,6 @@ class ResNetWSL(nn.Module):
         if same_kernel:
             self.classifier.apply(repeat_weights)
 
-
-        
         self.spatial_pooling = pooling
 
         # image normalization
@@ -139,10 +137,16 @@ def resnet50_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, n
         kernel_size=kernel_size,same_kernel=same_kernel)
 
 
-def resnet101_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, num_maps=1,kernel_size=1,same_kernel=False):
+def resnet101_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, num_maps=1,kernel_size=1,same_kernel=False,mode=''):
     model = models.resnet101(pretrained)
     pooling = nn.Sequential()
-    pooling.add_module('class_wise', ClassWisePool(num_maps))
-    pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
+    if mode=='':
+		pooling.add_module('class_wise', ClassWisePool(num_maps))
+		pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
+	elif mode=='Direct':
+		pooling.add_module('class_wise',DirectMaxPlusAlphaMinPool2d(num_maps,kmax, kmin, alpha))
+	elif mode=='LCP': # Learned Classwise pooling 
+		pooling.add_module('class_wise',LCPPool(num_maps))
+		pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
     return ResNetWSL(model, num_classes , num_maps, pooling=pooling,\
         kernel_size=kernel_size,same_kernel=same_kernel)

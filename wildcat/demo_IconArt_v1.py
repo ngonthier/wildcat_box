@@ -75,6 +75,9 @@ def get_parser():
                         help='Use this command to save the model before optimization.')
     parser.add_argument('--ext', default='', type=str,
                         help='Extension added to the name of the model saved (default: '')')
+    parser.add_argument('--mode', default='', type=str,
+						choices=['','Direct','LCP']
+                        help='Modification of the default WILDCAT algo to have different kernel learned (default: '')')
     return(parser)
 
 def main():
@@ -88,6 +91,9 @@ def train_or_test_IconArt_v1(args):
     model_name_base = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
     '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
     '_a'+str(args.alpha)+'_m'+str(args.maps)
+    
+    if not(args.mode==''):
+		model_name_base += args.mode
     
     if args.att:
         model_name_base = 'model_att'+str(args.image_size)+'_bs'+str(args.batch_size)+\
@@ -119,7 +125,8 @@ def train_or_test_IconArt_v1(args):
         # load model
         if not(args.att):
             model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
-             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,same_kernel=args.same_kernel)
+             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
+             same_kernel=args.same_kernel,mode=args.mode)
         else:
             model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
              num_maps=args.maps,kernel_size=args.kernel_size)
@@ -162,7 +169,8 @@ def train_or_test_IconArt_v1(args):
         num_classes = 7
         if not(args.att):
             model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
-             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,same_kernel=args.same_kernel)
+             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
+             same_kernel=args.same_kernel,mode=args.mode)
         else:
             model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
              num_maps=args.maps,kernel_size=args.kernel_size)
