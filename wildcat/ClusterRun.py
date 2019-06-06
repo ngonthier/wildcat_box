@@ -36,8 +36,18 @@ def main():
 					save_init_model=True,ext=ext,test=test,classif=classif)
 				args = parser.parse_args()
 				train_or_test_IconArt_v1(args)
-    
-    
-
+				
+def mainDirect():
+	for k in [25,0.13]: # 13 % of the region take for max and min
+		for classif in [False,True]:
+			# Training or Testing
+			parser = get_parser()
+			ext ='_'+str(i)
+			parser.set_defaults(data='data/',image_size=600,batch_size=8,lrp=0.1,lr=0.01,\
+				epochs=20,k=k,maps=8,alpha=0.7,\
+				save_init_model=True,test=False,classif=classif,mode='Direct') # pas de test de detection
+			args = parser.parse_args()
+			train_or_test_IconArt_v1(args)
+     
 if __name__ == '__main__':
-    main()
+    mainDirect()

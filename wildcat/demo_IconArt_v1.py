@@ -155,7 +155,7 @@ def train_or_test_IconArt_v1(args):
         dst = path + model_name
         copyfile(src, dst)
     else:
-        print("Testing detection")
+        print("Testing")
         PATH =  'expes/models/IconArt_v1/'+model_name
         state = {'batch_size': args.batch_size, 'image_size': args.image_size, 'max_epochs': args.epochs,
                  'evaluate': args.evaluate, 'resume': PATH}
@@ -223,126 +223,128 @@ def train_or_test_IconArt_v1(args):
             if not(args.test):
                 return(0)
 
-        database = 'IconArt_v1_test'
-        imdb = get_imdb('IconArt_v1_test')
-        imdb.set_use_diff(True)
-        dont_use_07_metric = True
-        imdb.set_force_dont_use_07_metric(dont_use_07_metric)
+        if args.test:
+            print('-------- test detection --------')
+            database = 'IconArt_v1_test'
+            imdb = get_imdb('IconArt_v1_test')
+            imdb.set_use_diff(True)
+            dont_use_07_metric = True
+            imdb.set_force_dont_use_07_metric(dont_use_07_metric)
 
-        max_per_image = 100
-        num_images_detect =  len(imdb.image_index)
-        all_boxes_order = [[[] for _ in range(num_images_detect)] for _ in range(imdb.num_classes)]
-        
-        plot = args.plot
-        if plot:
-            plt.ion()
-            import pathlib
-            folder = '/media/HDD/output_exp/WILDCAT/'+ 'WILDCAT_'+model_name_base+'/'
-            pathlib.Path(folder).mkdir(parents=True, exist_ok=True)
-        Itera = 500
-        for i in range(num_images_detect):
-            image_name = imdb.image_path_at(i)
-            if i%Itera==0:
-                print(i,' : ',image_name)
-            with torch.no_grad():
-                image_raw = Image.open(image_name).convert("RGB")
-                image_normalized = image_transform(image_raw).float()
-                #image_normalized = torch.from_numpy(np.array(image_raw)).permute(2, 0, 1)
-                if use_gpu:
-                    #image_normalized= image_normalized.cuda()
-                    #image_normalized= image_normalized.float().div(255)
-                    image_normalized= image_normalized.cuda()
-                    # This model need a RGB image scale between 0 and 1 reduce the mean if ImageNet
-                    #image_normalized = image_normalized.index_select(0, torch.LongTensor([2,1,0]).cuda())
-                    #image_normalized = (image_normalized - torch.Tensor([0.485, 0.456, 0.406]).cuda().view(3, 1, 1))
-                input_var = Variable(image_normalized.unsqueeze(0))
-                #input_var = Variable(image_normalized.unsqueeze(0), volatile=True)
-                if not(with_gt):
-                    gt_labels_minus1 = None
-                else:
-                    image_name_split = image_name.split('/')[-1]
-                    image_name_split = image_name_split.split('.')[0]
-                    gt_labels = np.unique(imdb._load_pascal_annotation(image_name_split)['gt_classes'])
-                    #print('gt_labels',gt_labels)
-                    gt_labels_minus1 = gt_labels -1 # Background as class 0
-                    #gt_labels_minus = None
-
-                #preds, labels = object_localization(model_dict, input_var, location_type='bbox',gt_labels=None)
-                #print('labels',labels)
-                #print('labels.cpu().numpy()',labels.cpu().numpy())
-                
-                preds, labels = object_localization(model, input_var, location_type='bbox',
-                    gt_labels=gt_labels_minus1,size=args.image_size)
-                #print('gt_labels_minus1',gt_labels_minus1)
-                #print('labels',labels)
-                #print('preds',preds)
-
-                # We need to resize the boxes to the real size of the image that have been wrap to (args.image_size, args.image_size)
-                x_,y_,_ = np.array(image_raw).shape # when you use cv2 the x and y are inverted
-                x_scale = x_ / args.image_size
-                y_scale = y_ / args.image_size
-                #print(x_scale,y_scale)
-                for ii,box in enumerate(preds):
-                    #print(x_,y_)
-                    #print(box)
-                    (classe,origLeft, origTop, origRight, origBottom,score) = box
-                    x = origLeft * x_scale
-                    y = origTop * y_scale
-                    xmax = origRight * x_scale
-                    ymax = origBottom * y_scale
-                    preds[ii] = [classe,x, y, xmax, ymax,score]
-                    #print(preds[ii])
-
-                if plot:
-                    preds_np =np.array(preds)
-                    if not(len(preds_np)==0):
-                        inds = np.where(np.array(preds_np)[:,-1]>0.)
-                        if not(len(inds)==0):
-                            inds = inds[0]
-                            preds_plot = preds_np[inds,:]
-                            labels_plot = preds_plot[:,0]
-                            img = Image.open(image_name)
-                            #img_resized = img.resize((args.image_size, args.image_size), Image.ANTIALIAS)
-                            img_draw = draw_bboxes(img, preds_plot, object_categories)
-                            plt.imshow(img_draw)
-                            tmp = image_name.split('/')[-1]
-                            name_output =  folder + tmp.split('.')[0] +'_Regions.jpg'
-                            plt.axis('off')
-                            plt.tight_layout()
-                            #plt.show()
-                            plt.savefig(name_output, dpi=300)
-                            #input('wait')
-
-                for j in range(len(preds)):
-                    index_c = preds[j][0]+1
-                    if len(all_boxes_order[index_c][i])==0:
-                        all_boxes_order[index_c][i] = np.array([preds[j][1:]])
+            max_per_image = 100
+            num_images_detect =  len(imdb.image_index)
+            all_boxes_order = [[[] for _ in range(num_images_detect)] for _ in range(imdb.num_classes)]
+            
+            plot = args.plot
+            if plot:
+                plt.ion()
+                import pathlib
+                folder = '/media/HDD/output_exp/WILDCAT/'+ 'WILDCAT_'+model_name_base+'/'
+                pathlib.Path(folder).mkdir(parents=True, exist_ok=True)
+            Itera = 500
+            for i in range(num_images_detect):
+                image_name = imdb.image_path_at(i)
+                if i%Itera==0:
+                    print(i,' : ',image_name)
+                with torch.no_grad():
+                    image_raw = Image.open(image_name).convert("RGB")
+                    image_normalized = image_transform(image_raw).float()
+                    #image_normalized = torch.from_numpy(np.array(image_raw)).permute(2, 0, 1)
+                    if use_gpu:
+                        #image_normalized= image_normalized.cuda()
+                        #image_normalized= image_normalized.float().div(255)
+                        image_normalized= image_normalized.cuda()
+                        # This model need a RGB image scale between 0 and 1 reduce the mean if ImageNet
+                        #image_normalized = image_normalized.index_select(0, torch.LongTensor([2,1,0]).cuda())
+                        #image_normalized = (image_normalized - torch.Tensor([0.485, 0.456, 0.406]).cuda().view(3, 1, 1))
+                    input_var = Variable(image_normalized.unsqueeze(0))
+                    #input_var = Variable(image_normalized.unsqueeze(0), volatile=True)
+                    if not(with_gt):
+                        gt_labels_minus1 = None
                     else:
-                        all_boxes_order[index_c][i] = np.vstack((preds[j][1:],all_boxes_order[index_c][i]))
-                #if not(with_gt):
-                #    for c in labels:
-                #        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
-                #else: # gt cases
-                #    for c in labels:
-                #        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
+                        image_name_split = image_name.split('/')[-1]
+                        image_name_split = image_name_split.split('.')[0]
+                        gt_labels = np.unique(imdb._load_pascal_annotation(image_name_split)['gt_classes'])
+                        #print('gt_labels',gt_labels)
+                        gt_labels_minus1 = gt_labels -1 # Background as class 0
+                        #gt_labels_minus = None
 
-        output_dir = 'tmp/'
-        aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
-        apsAt05 = aps
-        print("Detection score (thres = 0.5): ",database)
-        print(arrayToLatex(aps,per=True))
-        ovthresh_tab = [0.3,0.1,0.]
-        for ovthresh in ovthresh_tab:
-            aps = imdb.evaluate_localisation_ovthresh(all_boxes_order, output_dir,ovthresh)
-            if ovthresh == 0.1:
-                apsAt01 = aps
-            print("Detection score with thres at ",ovthresh)
+                    #preds, labels = object_localization(model_dict, input_var, location_type='bbox',gt_labels=None)
+                    #print('labels',labels)
+                    #print('labels.cpu().numpy()',labels.cpu().numpy())
+                    
+                    preds, labels = object_localization(model, input_var, location_type='bbox',
+                        gt_labels=gt_labels_minus1,size=args.image_size)
+                    #print('gt_labels_minus1',gt_labels_minus1)
+                    #print('labels',labels)
+                    #print('preds',preds)
+
+                    # We need to resize the boxes to the real size of the image that have been wrap to (args.image_size, args.image_size)
+                    x_,y_,_ = np.array(image_raw).shape # when you use cv2 the x and y are inverted
+                    x_scale = x_ / args.image_size
+                    y_scale = y_ / args.image_size
+                    #print(x_scale,y_scale)
+                    for ii,box in enumerate(preds):
+                        #print(x_,y_)
+                        #print(box)
+                        (classe,origLeft, origTop, origRight, origBottom,score) = box
+                        x = origLeft * x_scale
+                        y = origTop * y_scale
+                        xmax = origRight * x_scale
+                        ymax = origBottom * y_scale
+                        preds[ii] = [classe,x, y, xmax, ymax,score]
+                        #print(preds[ii])
+
+                    if plot:
+                        preds_np =np.array(preds)
+                        if not(len(preds_np)==0):
+                            inds = np.where(np.array(preds_np)[:,-1]>0.)
+                            if not(len(inds)==0):
+                                inds = inds[0]
+                                preds_plot = preds_np[inds,:]
+                                labels_plot = preds_plot[:,0]
+                                img = Image.open(image_name)
+                                #img_resized = img.resize((args.image_size, args.image_size), Image.ANTIALIAS)
+                                img_draw = draw_bboxes(img, preds_plot, object_categories)
+                                plt.imshow(img_draw)
+                                tmp = image_name.split('/')[-1]
+                                name_output =  folder + tmp.split('.')[0] +'_Regions.jpg'
+                                plt.axis('off')
+                                plt.tight_layout()
+                                #plt.show()
+                                plt.savefig(name_output, dpi=300)
+                                #input('wait')
+
+                    for j in range(len(preds)):
+                        index_c = preds[j][0]+1
+                        if len(all_boxes_order[index_c][i])==0:
+                            all_boxes_order[index_c][i] = np.array([preds[j][1:]])
+                        else:
+                            all_boxes_order[index_c][i] = np.vstack((preds[j][1:],all_boxes_order[index_c][i]))
+                    #if not(with_gt):
+                    #    for c in labels:
+                    #        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
+                    #else: # gt cases
+                    #    for c in labels:
+                    #        all_boxes_order[c+1][i] = np.array(all_boxes_order[c+1][i])
+
+            output_dir = 'tmp/'
+            aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
+            apsAt05 = aps
+            print("Detection score (thres = 0.5): ",database)
             print(arrayToLatex(aps,per=True))
-        #imdb.set_use_diff(True) # Modification of the use_diff attribute in the imdb
-        #aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
-        #print("Detection score with the difficult element")
-        #print(arrayToLatex(aps,per=True))
-        #imdb.set_use_diff(False)
+            ovthresh_tab = [0.3,0.1,0.]
+            for ovthresh in ovthresh_tab:
+                aps = imdb.evaluate_localisation_ovthresh(all_boxes_order, output_dir,ovthresh)
+                if ovthresh == 0.1:
+                    apsAt01 = aps
+                print("Detection score with thres at ",ovthresh)
+                print(arrayToLatex(aps,per=True))
+            #imdb.set_use_diff(True) # Modification of the use_diff attribute in the imdb
+            #aps =  imdb.evaluate_detections(all_boxes_order, output_dir)
+            #print("Detection score with the difficult element")
+            #print(arrayToLatex(aps,per=True))
+            #imdb.set_use_diff(False)
 
 
 

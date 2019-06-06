@@ -215,10 +215,14 @@ class ClassWisePoolFunction(Function):
         return grad_input.view(batch_size, num_channels, h, w)
         
 class LCPPoolFunction(Function):
-    def __init__(self, num_maps,kernel_size=1):
-        super(ClassWisePoolFunction, self).__init__()
+    def __init__(self,num_classes,num_maps,kernel_size=1):
+        super(LCPPoolFunction, self).__init__()
+        self.num_classes = num_classes
         self.num_maps = num_maps
         self.kernel_size = kernel_size
+        self.learned_pooling = nn.Sequential(
+            nn.Conv2d( self.num_maps, num_classes, kernel_size=self.kernel_size, stride=1, padding=0, bias=True))
+        # in_channels, out_channels, kernel_size
         
     def forward(self, input):
         # batch dimension
@@ -230,16 +234,11 @@ class LCPPoolFunction(Function):
 
         num_outputs = int(num_channels / self.num_maps)
         x = input.view(batch_size*num_outputs, self.num_maps, h, w)
-        learned_pooling = nn.Sequential(
-            nn.Conv2d( self.num_maps, num_classes, kernel_size=kernel_size, stride=1, padding=0, bias=True))
-             # Il va surement falloir monter cela dans le init
-        # in_channels, out_channels, kernel_size
         
-        output = learned_pooling(x)
-        
-        output = torch.sum(x, 2)
+        output = self.learned_pooling(x)
+
         self.save_for_backward(input)
-        return output.view(batch_size, num_classes, h, w) # Normalisation par le nombre de maps / self.num_maps 
+        return output.view(batch_size, num_outputs, h, w) # Normalisation par le nombre de maps / self.num_maps 
 
     def backward(self, grad_output):
         input, = self.saved_tensors
@@ -267,13 +266,14 @@ class ClassWisePool(nn.Module):
         
         
 class LCPPool(nn.Module):
-    def __init__(self, num_maps,kernel_size=1):
+    def __init__(self,num_classes, num_maps,kernel_size=1):
         super(LCPPool, self).__init__()
         self.num_maps = num_maps
         self.kernel_size = kernel_size
+        self.num_classes = num_classes
 
     def forward(self, input):
-        return LCPPoolFunction(self.num_maps,kernel_size)(input)
+        return LCPPoolFunction(self.num_classes,self.num_maps,self.kernel_size)(input)
 
     def __repr__(self):
         return self.__class__.__name__ + ' (num_maps={num_maps})'.format(num_maps=self.num_maps)+ ' (kernel_size={kernel_size})'.format(kernel_size=self.kernel_size)
