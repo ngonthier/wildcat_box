@@ -213,16 +213,25 @@ class ClassWisePoolFunction(Function):
                                                                                h, w).contiguous()
 
         return grad_input.view(batch_size, num_channels, h, w)
-        
-class LCPPoolFunction(Function):
+
+def learned_pooling(num_maps,kernel_size):
+    conv2d = nn.Sequential(
+            nn.Conv2d(num_maps, 1, kernel_size=kernel_size, stride=1, padding=0, bias=True))
+    return(conv2d)
+    
+class LCPPool(nn.Module): # Replace Function by nn.Module
     def __init__(self,num_classes,num_maps,kernel_size=1):
-        super(LCPPoolFunction, self).__init__()
+        super(LCPPool, self).__init__()
         self.num_classes = num_classes
         self.num_maps = num_maps
         self.kernel_size = kernel_size
-        self.learned_pooling = nn.Sequential(
-            nn.Conv2d( self.num_maps, num_classes, kernel_size=self.kernel_size, stride=1, padding=0, bias=True))
-        # in_channels, out_channels, kernel_size
+        
+        self.branches = nn.ModuleList([learned_pooling(num_maps,kernel_size) for i in range(self.num_classes)])
+        for i, branch in enumerate(self.branches):
+            self.add_module(str(i), branch)
+        # self.learned_pooling = nn.Sequential(
+            # nn.Conv2d( self.num_maps, 1, kernel_size=self.kernel_size, stride=1, padding=0, bias=True)) # We keep only one element per image
+        # # in_channels, out_channels, kernel_size
         
     def forward(self, input):
         # batch dimension
@@ -233,25 +242,34 @@ class LCPPoolFunction(Function):
             sys.exit(-1)
 
         num_outputs = int(num_channels / self.num_maps)
-        x = input.view(batch_size*num_outputs, self.num_maps, h, w)
+        x = input.view(batch_size,num_outputs, self.num_maps, h, w)
         
-        output = self.learned_pooling(x)
+        #print('before cat')
+        
+        output = torch.cat([b(x[:,i,:,:]) for i,b in enumerate(self.branches)], 1)
+        
+        # print(self.learned_pooling)
+        # print(x)
+        # output = self.learned_pooling(x)
+        #print(output)
 
-        self.save_for_backward(input)
-        return output.view(batch_size, num_outputs, h, w) # Normalisation par le nombre de maps / self.num_maps 
+        #self.save_for_backward(input)
+        return output.view(batch_size, self.num_classes, h, w) # Normalisation par le nombre de maps / self.num_maps 
 
-    def backward(self, grad_output):
-        input, = self.saved_tensors
+    # def backward(self, grad_output):
+        # input, = self.saved_tensors
 
-        # batch dimension
-        batch_size, num_channels, h, w = input.size()
-        num_outputs = grad_output.size(1)
+        # # batch dimension
+        # batch_size, num_channels, h, w = input.size()
+        # num_outputs = grad_output.size(1)
 
-        grad_input = grad_output.view(batch_size, num_outputs, 1, h, w).expand(batch_size, num_outputs, self.num_maps,
-                                                                               h, w).contiguous()
+        # grad_input = grad_output.view(batch_size, num_outputs, 1, h, w).expand(batch_size, num_outputs, self.num_maps,
+                                                                               # h, w).contiguous()
 
-        return grad_input.view(batch_size, num_channels, h, w)
-
+        # return grad_input.view(batch_size, num_channels, h, w)
+        
+    def __repr__(self):
+        return self.__class__.__name__ + ' (num_maps={num_maps})'.format(num_maps=self.num_maps)+ ' (kernel_size={kernel_size})'.format(kernel_size=self.kernel_size)
 
 class ClassWisePool(nn.Module):
     def __init__(self, num_maps):
@@ -263,18 +281,3 @@ class ClassWisePool(nn.Module):
 
     def __repr__(self):
         return self.__class__.__name__ + ' (num_maps={num_maps})'.format(num_maps=self.num_maps)
-        
-        
-class LCPPool(nn.Module):
-    def __init__(self,num_classes, num_maps,kernel_size=1):
-        super(LCPPool, self).__init__()
-        self.num_maps = num_maps
-        self.kernel_size = kernel_size
-        self.num_classes = num_classes
-
-    def forward(self, input):
-        return LCPPoolFunction(self.num_classes,self.num_maps,self.kernel_size)(input)
-
-    def __repr__(self):
-        return self.__class__.__name__ + ' (num_maps={num_maps})'.format(num_maps=self.num_maps)+ ' (kernel_size={kernel_size})'.format(kernel_size=self.kernel_size)
-
