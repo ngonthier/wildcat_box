@@ -43,7 +43,6 @@ def mainDirect():
 			for classif in [False,True]:
 				# Training or Testing
 				parser = get_parser()
-				ext ='_'+str(i)
 				parser.set_defaults(data='data/',image_size=600,batch_size=8,lrp=0.1,lr=0.01,\
 					epochs=20,k=k,maps=8,alpha=0.7,\
 					save_init_model=True,test=False,classif=classif,mode=mode) # pas de test de detection

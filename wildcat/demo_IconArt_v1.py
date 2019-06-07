@@ -93,7 +93,7 @@ def train_or_test_IconArt_v1(args):
     '_a'+str(args.alpha)+'_m'+str(args.maps)
     
     if not(args.mode==''):
-        model_name_base += args.mode
+        model_name_base += '_'+ args.mode
     
     if args.att:
         model_name_base = 'model_att'+str(args.image_size)+'_bs'+str(args.batch_size)+\
