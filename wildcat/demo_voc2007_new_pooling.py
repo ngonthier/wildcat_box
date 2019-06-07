@@ -100,9 +100,9 @@ def train_or_test_VOC07(args):
         print("Training")
 
         # define dataset
-		train_dataset = Voc2007Classification(args.data, 'trainval')
-		val_dataset = Voc2007Classification(args.data, 'test')
-		num_classes = 20
+        train_dataset = Voc2007Classification(args.data, 'trainval')
+        val_dataset = Voc2007Classification(args.data, 'test')
+        num_classes = 20
 
         # load model
         if not(args.att):
