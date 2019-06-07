@@ -66,7 +66,7 @@ def main():
     global args, best_prec1, use_gpu
     parser = get_parser()
     args = parser.parse_args()
-    train_or_test_IconArt_v1(args)
+    train_or_test_VOC07(args)
 
 def train_or_test_VOC07(args):
 
