@@ -6,6 +6,27 @@ import torch.nn as nn
 from wildcat.engine import MultiLabelMAPEngine
 from wildcat.models import resnet101_wildcat
 from wildcat.voc import Voc2007Classification
+from wildcat.boxesPredict import object_localization
+
+from wildcat.tf_faster_rcnn.lib.datasets.factory import get_imdb
+
+from shutil import copyfile
+from PIL import Image, ImageDraw, ImageFont
+import numpy as np
+from torch.autograd import Variable
+from wildcat.LatexOuput import arrayToLatex
+import matplotlib.pyplot as plt
+from wildcat.util import draw_bboxes
+
+import torchvision.transforms as transforms
+from wildcat.util import AveragePrecisionMeter, Warp
+
+object_categories = ['aeroplane', 'bicycle', 'bird', 'boat',
+                     'bottle', 'bus', 'car', 'cat', 'chair',
+                     'cow', 'diningtable', 'dog', 'horse',
+                     'motorbike', 'person', 'pottedplant',
+                     'sheep', 'sofa', 'train', 'tvmonitor']
+
 
 def get_parser():
     parser = argparse.ArgumentParser(description='WILDCAT Training')
