@@ -159,7 +159,6 @@ def train_or_test_VOC07(args):
         copyfile(src, dst)
     else:
         print("Testing")
-        raise(NotImplementedError)
         PATH =  'expes/models/VOC2007/'+model_name
         state = {'batch_size': args.batch_size, 'image_size': args.image_size, 'max_epochs': args.epochs,
                  'evaluate': args.evaluate, 'resume': PATH}
