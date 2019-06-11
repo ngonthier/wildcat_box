@@ -117,13 +117,14 @@ def train_or_test_VOC07(args):
 
     sizeMaps = (args.image_size)//32 +1 # Necessary for the attention model
 
+    num_classes = len(object_categories)
+
     if not(args.test) and not(args.classif):
         print("Training")
 
         # define dataset
         train_dataset = Voc2007Classification(args.data, 'trainval')
         val_dataset = Voc2007Classification(args.data, 'test')
-        num_classes = 20
 
         # load model
         if not(args.att):
@@ -163,13 +164,13 @@ def train_or_test_VOC07(args):
         state = {'batch_size': args.batch_size, 'image_size': args.image_size, 'max_epochs': args.epochs,
                  'evaluate': args.evaluate, 'resume': PATH}
         state['difficult_examples'] = True
-        state['save_model_path'] = 'expes/models/IconArt_v1/'
+        state['save_model_path'] = 'expes/models/VOC2007/'
         use_gpu = torch.cuda.is_available()
         state['use_gpu'] = use_gpu
 
         with_gt = False
         multiscale = False
-        num_classes = 7
+        
         if not(args.att):
             model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
              alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
@@ -212,7 +213,7 @@ def train_or_test_VOC07(args):
             case += ' With Ground Truth classification '
         print('===',case,'===')
 
-        val_dataset = main_IconArt_v1Classification(args.data, 'test')
+        val_dataset = Voc2007Classification(args.data, 'test')
         val_dataset.transform = image_transform
         criterion = nn.MultiLabelSoftMarginLoss()
 
