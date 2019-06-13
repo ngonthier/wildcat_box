@@ -25,7 +25,7 @@
 from wildcat.demo_voc2007_new_pooling import get_parser,train_or_test_VOC07
                 
 def mainDirect():
-        k = 20
+    k = 20
     for mode in ['Direct','LCP']:
         for lrm in [1.,10.]: # 13 % of the region take for max and min
             for classif in [False,True]:
