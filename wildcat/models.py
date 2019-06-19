@@ -145,8 +145,16 @@ def resnet101_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, 
         pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
     elif mode=='Direct':
         pooling.add_module('class_wise',DirectMaxPlusAlphaMinPool2d(num_maps,kmax, kmin, alpha))
-    elif mode=='LCP': # Learned Classwise pooling 
-        pooling.add_module('ReLU',nn.ReLU())
+    elif mode=='LCP': # Learned Classwise pooling with a ReLU
+        pooling.add_module('ReLU',nn.ReLU()) 
+        pooling.add_module('class_wise',LCPPool(num_classes,num_maps,kernel_size_lcp))
+        pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
+    elif mode=='LCPPReLU': # Learned Classwise pooling with a ReLU
+        pooling.add_module('PReLU',nn.PReLU())
+        pooling.add_module('class_wise',LCPPool(num_classes,num_maps,kernel_size_lcp))
+        pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
+    elif mode=='LCPRReLU': # Learned Classwise pooling with a ReLU
+        pooling.add_module('RReLU',nn.RReLU())
         pooling.add_module('class_wise',LCPPool(num_classes,num_maps,kernel_size_lcp))
         pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
     return ResNetWSL(model, num_classes , num_maps, pooling=pooling,\

@@ -76,7 +76,7 @@ def get_parser():
     parser.add_argument('--ext', default='', type=str,
                         help='Extension added to the name of the model saved (default: '')')
     parser.add_argument('--mode', default='', type=str,
-                        choices=['','Direct','LCP'],
+                        choices=['','Direct','LCP','LCPPReLU','LCPRReLU'],
                         help='Modification of the default WILDCAT algo to have different kernel learned (default: '')')
     return(parser)
 
