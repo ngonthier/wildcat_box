@@ -26,12 +26,12 @@ from wildcat.demo_voc2007_new_pooling import get_parser,train_or_test_VOC07
                 
 def mainDirect():
     k = 20
-    for mode in ['Direct','LCP']:
-        for lrm in [1.,10.]: # 13 % of the region take for max and min
+    for mode in ['']:
+        for k in [20,0.13]: # 13 % of the region take for max and min
             for classif in [False,True]:
                 # Training or Testing
                 parser = get_parser()
-                parser.set_defaults(data='../data/voc',image_size=448,batch_size=16,lrp=lrm*0.1,lr=lrm*0.01,\
+                parser.set_defaults(data='../data/voc',image_size=448,batch_size=16,lrp=0.1,lr=0.01,\
                     epochs=20,k=k,maps=4,alpha=0.7,\
                     save_init_model=True,test=False,classif=classif,mode=mode) # pas de test de detection
                 args = parser.parse_args()
