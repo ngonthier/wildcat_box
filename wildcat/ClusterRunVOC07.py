@@ -49,6 +49,25 @@ def mainDirect():
                     save_init_model=True,test=False,classif=classif,mode=mode) # pas de test de detection
                 args = parser.parse_args()
                 train_or_test_VOC07(args)
+                
+def mainAll():
+    k = 20
+    for mode in ['','LCP','Direct','LCPPReLU','LCPRReLU']:
+		for kernel_size in [1,3]:
+			if not mode in ['','Direct']:
+				kernel_size_lcp_tab = [1,3]
+			else:
+				kernel_size_lcp_tab = [1]
+			for kernel_size_lcp in kernel_size_lcp_tab:
+				for classif in [False,True]:
+					# Training or Testing
+					parser = get_parser()
+					parser.set_defaults(data='../data/voc',image_size=448,batch_size=16,lrp=0.1,lr=0.01,\
+						epochs=20,k=k,maps=4,alpha=0.7,\
+						save_init_model=False,test=False,classif=classif,mode=mode
+						,kernel_size_lcp=kernel_size_lcp,kernel_size=kernel_size) # pas de test de detection
+					args = parser.parse_args()
+					train_or_test_VOC07(args)
      
 if __name__ == '__main__':
-    mainDirect()
+    mainAll()
