@@ -217,6 +217,7 @@ class ClassWisePoolFunction(Function):
 def learned_pooling(num_maps,kernel_size):
     conv2d = nn.Sequential(
             nn.Conv2d(num_maps, 1, kernel_size=kernel_size, stride=1, padding=0, bias=True))
+            # in_channels, out_channels, kernel_size
     return(conv2d)
     
 class LCPPool(nn.Module): # Replace Function by nn.Module
@@ -226,12 +227,15 @@ class LCPPool(nn.Module): # Replace Function by nn.Module
         self.num_maps = num_maps
         self.kernel_size = kernel_size
         
-        self.branches = nn.ModuleList([learned_pooling(num_maps,kernel_size) for i in range(self.num_classes)])
-        for i, branch in enumerate(self.branches):
-            self.add_module(str(i), branch)
+        self.convs = nn.Sequential(
+            nn.Conv2d(num_maps*num_classes, num_classes, kernel_size=kernel_size, stride=1, padding=0, bias=True,groups=num_classes))
+        
+        # self.branches = nn.ModuleList([learned_pooling(num_maps,kernel_size) for i in range(self.num_classes)])
+        # for i, branch in enumerate(self.branches):
+            # self.add_module(str(i), branch)
         # self.learned_pooling = nn.Sequential(
             # nn.Conv2d( self.num_maps, 1, kernel_size=self.kernel_size, stride=1, padding=0, bias=True)) # We keep only one element per image
-        # # in_channels, out_channels, kernel_size
+        # 
         
     def forward(self, input):
         # batch dimension
@@ -242,19 +246,24 @@ class LCPPool(nn.Module): # Replace Function by nn.Module
             sys.exit(-1)
 
         num_outputs = int(num_channels / self.num_maps)
-        x = input.view(batch_size,num_outputs, self.num_maps, h, w)
         
-        #print('before cat')
+        output = self.convs(input)
+        return(output)
+        # x = input.view(batch_size,num_outputs, self.num_maps, h, w)
         
-        output = torch.cat([b(x[:,i,:,:]) for i,b in enumerate(self.branches)], 1)
+        # #print('before cat')
         
-        # print(self.learned_pooling)
-        # print(x)
-        # output = self.learned_pooling(x)
-        #print(output)
+        # output = torch.cat([b(x[:,i,:,:]) for i,b in enumerate(self.branches)], 1)
+        
+        # # print(self.learned_pooling)
+        # # print(x)
+        # # output = self.learned_pooling(x)
+        # #print(output)
 
-        #self.save_for_backward(input)
-        return output.view(batch_size, self.num_classes, h, w) # Normalisation par le nombre de maps / self.num_maps 
+        # #self.save_for_backward(input)
+        # import numpy as np
+        # print(np.shape(output.detach().cpu().numpy()))
+        #return output.view(batch_size, self.num_classes, h, w) # Normalisation par le nombre de maps / self.num_maps 
 
     # def backward(self, grad_output):
         # input, = self.saved_tensors

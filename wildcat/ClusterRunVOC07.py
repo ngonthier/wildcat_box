@@ -63,7 +63,7 @@ def mainAll():
                     # Training or Testing
                     parser = get_parser()
                     parser.set_defaults(data='../data/voc',image_size=448,batch_size=16,lrp=0.1,lr=0.01,\
-                        epochs=20,k=k,maps=4,alpha=0.7,\
+                        epochs=40,k=k,maps=4,alpha=0.7,\
                         save_init_model=False,test=False,classif=classif,mode=mode
                         ,kernel_size_lcp=kernel_size_lcp,kernel_size=kernel_size) # pas de test de detection
                     args = parser.parse_args()

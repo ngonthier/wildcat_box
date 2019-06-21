@@ -61,6 +61,8 @@ def get_parser():
                         metavar='N', help='number of maps per class (default: 1)')
     parser.add_argument('--kernel_size', default=1, type=int,
                         metavar='N', help='kernel size in the last layer (default: 1)')
+    parser.add_argument('--kernel_size_lcp', default=1, type=int,
+                        metavar='N', help='kernel size in the last layer for LCP pooling (default: 1)')
     parser.add_argument('--test', action="store_true",
                         help='Use this command to eval the detection performance of the model')
     parser.add_argument('--classif', action="store_true",
@@ -102,6 +104,8 @@ def train_or_test_IconArt_v1(args):
         model_name_base += '_SameKernel'
     if not(args.kernel_size==1):
         model_name_base += '_ks'+str(args.kernel_size)
+    if not(args.kernel_size_lcp==1):
+        model_name_base += '_lcpks'+str(args.kernel_size_lcp)
     model_name_base += args.ext
     model_name = model_name_base+'.pth.tar'
 
@@ -126,7 +130,7 @@ def train_or_test_IconArt_v1(args):
         if not(args.att):
             model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
              alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
-             same_kernel=args.same_kernel,mode=args.mode)
+             same_kernel=args.same_kernel,mode=args.mode,kernel_size_lcp=args.kernel_size_lcp)
         else:
             model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
              num_maps=args.maps,kernel_size=args.kernel_size)
@@ -170,7 +174,7 @@ def train_or_test_IconArt_v1(args):
         if not(args.att):
             model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
              alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
-             same_kernel=args.same_kernel,mode=args.mode)
+             same_kernel=args.same_kernel,mode=args.mode,kernel_size_lcp=args.kernel_size_lcp)
         else:
             model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
              num_maps=args.maps,kernel_size=args.kernel_size)
