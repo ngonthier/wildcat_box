@@ -52,7 +52,7 @@ def mainDirect():
                 
 def mainAll():
     k = 20
-    for init in ['uniform_div_std_maps','xavier_uniform','kaiming_uniform','orthogonal']
+    for init in ['uniform_div_std_maps','xavier_uniform','kaiming_uniform','orthogonal']:
         for mode in ['LCP','Direct','LCPPReLU']:
             for kernel_size in [1,3]:
                 if not mode in ['','Direct']:
