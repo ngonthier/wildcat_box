@@ -83,6 +83,9 @@ def get_parser():
     parser.add_argument('--mode', default='', type=str,
                         choices=['','Direct','LCP','LCPPReLU','LCPRReLU'],
                         help='Modification of the default WILDCAT algo to have different kernel learned (default: '')')
+    parser.add_argument('--init', default='', type=str,
+                        choices=['','uniform_div_std_maps','xavier_uniform','kaiming_uniform','orthogonal'],
+                        help='Modification of the default WILDCAT algo to have different kernel learned (default: '')')
     return(parser)
 
 def main():
@@ -109,6 +112,8 @@ def train_or_test_VOC07(args):
         model_name_base += '_ks'+str(args.kernel_size)
     if not(args.kernel_size_lcp==1):
         model_name_base += '_lcpks'+str(args.kernel_size_lcp)
+    if not(args.init==''):
+        model_name_base += '_' +args.init
     model_name_base += args.ext
     model_name = model_name_base+'.pth.tar'
 
@@ -134,7 +139,8 @@ def train_or_test_VOC07(args):
         if not(args.att):
             model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
              alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
-             same_kernel=args.same_kernel,mode=args.mode,kernel_size_lcp=args.kernel_size_lcp)
+             same_kernel=args.same_kernel,mode=args.mode,kernel_size_lcp=args.kernel_size_lcp,
+             initialization=args.init)
         else:
             model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
              num_maps=args.maps,kernel_size=args.kernel_size)

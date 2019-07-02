@@ -4,6 +4,7 @@ import torch
 import numpy as np
 
 from wildcat.pooling import WildcatPool2d, ClassWisePool, DirectMaxPlusAlphaMinPool2d , LCPPool
+from wildcat.initializers import init_weights_xavier_uniform, init_weights_kaiming_uniform, init_weights_orthogonal,init_weights_uniform_div_std_num_maps
 
 def tile(a, dim, n_tile):
     init_dim = a.size(dim)
@@ -38,6 +39,9 @@ class ResNetWSL(nn.Module):
         self.classifier = nn.Sequential(
             nn.Conv2d(num_features, num_classes*num_maps, kernel_size=kernel_size, stride=1, padding=0, bias=True))
 
+        # The default initialization of Conv2d seems to be self.weight.data.uniform_(-stdv, stdv) and for the bias self.bias.data.uniform_(-stdv, stdv)
+        # With stdv = 1. / math.sqrt(self.weight.size(1)) self.weight.size(1) == num_classes*num_maps
+
         def init_weights(m):
             import math
             if type(m) == nn.Conv2d:
@@ -70,7 +74,7 @@ class ResNetWSL(nn.Module):
         
         if same_kernel:
             self.classifier.apply(repeat_weights)
-
+            
         self.spatial_pooling = pooling
 
         # image normalization
@@ -136,8 +140,9 @@ def resnet50_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, n
     return ResNetWSL(model, num_classes , num_maps, pooling=pooling,\
         kernel_size=kernel_size,same_kernel=same_kernel)
 
-
-def resnet101_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, num_maps=1,kernel_size=1,same_kernel=False,mode='',kernel_size_lcp=1):
+def resnet101_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, 
+    alpha=1, num_maps=1,kernel_size=1,same_kernel=False,mode='',
+    kernel_size_lcp=1,initialization=''):
     model = models.resnet101(pretrained)
     pooling = nn.Sequential()
     if mode=='':
@@ -157,5 +162,17 @@ def resnet101_wildcat(num_classes, pretrained=True, kmax=1, kmin=None, alpha=1, 
         pooling.add_module('RReLU',nn.RReLU())
         pooling.add_module('class_wise',LCPPool(num_classes,num_maps,kernel_size_lcp))
         pooling.add_module('spatial', WildcatPool2d(kmax, kmin, alpha))
+        
+    if initialization=='uniform_div_std_maps':
+        from functools import partial
+        init_weights_partial = partial(init_weights_uniform_div_std_num_maps,num_maps)
+        pooling.apply(init_weights_partial)
+    elif initialization=='xavier_uniform':
+        pooling.apply(init_weights_xavier_uniform)
+    elif initialization=='kaiming_uniform':
+        pooling.apply(init_weights_kaiming_uniform)
+    elif initialization=='orthogonal':
+        pooling.apply(init_weights_orthogonal)
+        
     return ResNetWSL(model, num_classes , num_maps, pooling=pooling,\
         kernel_size=kernel_size,same_kernel=same_kernel)
