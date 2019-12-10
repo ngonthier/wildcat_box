@@ -103,6 +103,10 @@ ENV/
 # folders
 expes/
 *.out
+
+# Images
+*.jpg
+*.png
 tmp/
 *.save
 data/
