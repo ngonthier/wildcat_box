@@ -4,8 +4,7 @@ import torch
 import torch.nn as nn
 
 from wildcat.engine import MultiLabelMAPEngine
-from wildcat.models import resnet101_wildcat
-from wildcat.Attention_models import resnet101_attention
+import torchvision.models as models
 from wildcat.IconArt_v1 import main_IconArt_v1Classification
 from wildcat.boxesPredict import object_localization
 
@@ -85,6 +84,58 @@ def get_parser():
                         help='Modification of the default WILDCAT algo to have different kernel learned (default: '')')
     return(parser)
 
+
+class ResNet(nn.Module):
+
+    def __init__(self, model, num_classes):
+        super(ResNet, self).__init__()
+
+        self.num_classes = num_classes
+
+        self.features = nn.Sequential(
+            model.conv1,
+            model.bn1,
+            model.relu,
+            model.maxpool,
+            model.layer1,
+            model.layer2,
+            model.layer3,
+            model.layer4)
+
+        # Pooling 
+        self.spatial_pooling = nn.AvgPool2d(7)
+        # suppose x is your feature map with size N*C*H*W
+        #x = torch.mean(x.view(x.size(0), x.size(1), -1), dim=2)
+        # now x is of size N*C
+
+        # classification layer
+        num_features = model.layer4[1].conv1.in_channels
+        input_size = 2048 #  number of features from the ResNet50
+        hidden_size = 256
+        self.classifier = nn.Sequential(nn.Linear(input_size,hidden_size),
+                nn.ReLU(),nn.Linear(hidden_size, num_classes),nn.Sigmoid())
+
+        # image normalization
+        self.image_normalization_mean = [0.485, 0.456, 0.406]
+        self.image_normalization_std = [0.229, 0.224, 0.225]
+
+    def forward(self, x):
+        x = self.features(x)
+        x = self.spatial_pooling(x)
+        x = x.view(-1,2048)
+        x = self.classifier(x)
+        return x
+
+    def get_config_optim(self, lr, lrp):
+        return [{'params': self.features.parameters(), 'lr': lr * lrp},
+                {'params': self.classifier.parameters()},
+                {'params': self.spatial_pooling.parameters()}]
+
+def resnet50_model(num_classes, pretrained=True):
+    model = models.resnet50(pretrained)
+    
+    return ResNet(model, num_classes)
+
 def main():
     global args, best_prec1, use_gpu
     parser = get_parser()
@@ -93,35 +144,13 @@ def main():
 
 def train_or_test_IconArt_v1(args):
 
-    model_name_base = 'model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
+    model_name_base = 'ResNet50_MLP2_model_im'+str(args.image_size)+'_bs'+str(args.batch_size)+\
     '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_k'+str(args.k)+\
     '_a'+str(args.alpha)+'_m'+str(args.maps)
     
-    if not(args.mode==''):
-        model_name_base += '_'+ args.mode
-    
-    if args.att:
-        model_name_base = 'model_att'+str(args.image_size)+'_bs'+str(args.batch_size)+\
-        '_lrp'+str(args.lrp)+'_lr'+str(args.lr)+'_ep'+str(args.epochs)+'_m'+str(args.maps)
-    if args.same_kernel:
-        model_name_base += '_SameKernel'
-    if not(args.kernel_size==1):
-        model_name_base += '_ks'+str(args.kernel_size)
-    if not(args.kernel_size_lcp==1):
-        model_name_base += '_lcpks'+str(args.kernel_size_lcp)
-    if not(args.init==''):
-        model_name_base += args.init
-    model_name_base += args.ext
     model_name = model_name_base+'.pth.tar'
-
-    if args.save_init_model:
-        name_init_model= model_name_base+'_initModel.pth.tar'
-    else:
-        name_init_model = model_name_base
-
+    
     use_gpu = torch.cuda.is_available()
-
-    sizeMaps = (args.image_size)//32 +1 # Necessary for the attention model
 
     if not(args.test) and not(args.classif):
         print("Training")
@@ -132,13 +161,7 @@ def train_or_test_IconArt_v1(args):
         num_classes = 7
 
         # load model
-        if not(args.att):
-            model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
-             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
-             same_kernel=args.same_kernel,mode=args.mode,kernel_size_lcp=args.kernel_size_lcp)
-        else:
-            model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
-             num_maps=args.maps,kernel_size=args.kernel_size)
+        model = resnet50_model(num_classes, pretrained=True)
 
         # define loss function (criterion)
         criterion = nn.MultiLabelSoftMarginLoss()
@@ -155,7 +178,7 @@ def train_or_test_IconArt_v1(args):
         state['save_model_path'] = 'expes/models/IconArt_v1/'
         engine = MultiLabelMAPEngine(state)
         engine.learning(model, criterion, train_dataset, val_dataset, 
-            optimizer,name_init_model=name_init_model)
+            optimizer)
 
         # Copy the checkpoint with a new name
         
@@ -176,13 +199,7 @@ def train_or_test_IconArt_v1(args):
         with_gt = False
         multiscale = False
         num_classes = 7
-        if not(args.att):
-            model = resnet101_wildcat(num_classes, pretrained=True, kmax=args.k,\
-             alpha=args.alpha, num_maps=args.maps,kernel_size=args.kernel_size,\
-             same_kernel=args.same_kernel,mode=args.mode,kernel_size_lcp=args.kernel_size_lcp)
-        else:
-            model = resnet101_attention(num_classes,sizeMaps=sizeMaps, pretrained=True,\
-             num_maps=args.maps,kernel_size=args.kernel_size)
+        model = resnet50_model(num_classes, pretrained=True)
         model.train(False)
         state_dict_all = torch.load(PATH)
         best_epoch = state_dict_all["epoch"]
@@ -362,8 +379,3 @@ def train_or_test_IconArt_v1(args):
 
 if __name__ == '__main__':
     main()
-    #train_or_test_IconArt_v1()
-    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image_size 600 --batch_size 8 --lrp 0.1 --lr 0.01 --epochs 10 --k 1 --maps 1 --alpha 0.0 --test --classif
-    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image_size 600 --batch_size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7 --test --classif
-    #python3 -m wildcat.demo_IconArt_v1 ../data/voc --image_size 448 --batch_size 16 --lrp 0.1 --lr 0.01 --epochs 20 --k 20 --maps 8 --alpha 0.7 --test --classif
-

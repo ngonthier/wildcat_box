@@ -211,7 +211,7 @@ class watercolorClassification(data.Dataset):
     def __init__(self, root, set, transform=None, target_transform=None):
         self.root = root
         self.path_devkit = os.path.join(root, 'VOCdevkit')
-        self.path_images = '/media/HDD/data/cross-domain-detection/datasets/watercolor/JPEGImages/'
+        self.path_images = '/media/gonthier/HDD/data/cross-domain-detection/datasets/watercolor/JPEGImages/'
         self.set = set
         self.transform = transform
         self.target_transform = target_transform
@@ -220,7 +220,7 @@ class watercolorClassification(data.Dataset):
         #download_voc2007(self.root)
 
         # define path of csv file
-        path_csv = '/media/HDD/output_exp/ClassifPaintings/'
+        path_csv = '/media/gonthier/HDD/output_exp/ClassifPaintings/'
         # define filename of csv file name_file_test = path_data + 'Paintings_Classification_test.csv'
         file_csv = os.path.join(path_csv, 'Classification_watercolor_' + set + '.csv')
 

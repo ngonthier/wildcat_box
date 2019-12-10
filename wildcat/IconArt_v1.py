@@ -211,7 +211,7 @@ class main_IconArt_v1Classification(data.Dataset):
     def __init__(self, root, set, transform=None, target_transform=None):
         self.root = root
         self.path_devkit = os.path.join(root, 'IconArt_v1')
-        path_base = '/media/HDD/data/Wikidata_Paintings/'
+        path_base = '/media/gonthier/HDD/data/Wikidata_Paintings/'
         if not(os.path.exists(path_base)):
             path_base = root
         self.path_images = path_base+'IconArt_v1/JPEGImages/'
