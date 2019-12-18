@@ -51,3 +51,16 @@ def generate_entrie_images(img_origin, img_grad, img_grad_overlay, img_integrad,
     total = cv2.resize(total, (550, 364))
 
     return total
+    
+def generate_entrie_images_with_title(img_origin, img_grad, img_grad_overlay, img_integrad, img_integrad_overlay,title=''):
+    blank = np.ones((img_grad.shape[0], 10, 3), dtype=np.uint8) * 255
+    blank_hor = np.ones((10, 20 + img_grad.shape[0] * 3, 3), dtype=np.uint8) * 255
+    upper = np.concatenate([img_origin[:, :, (2, 1, 0)], blank, img_grad_overlay, blank, img_grad], 1)
+    down = np.concatenate([img_origin[:, :, (2, 1, 0)], blank, img_integrad_overlay, blank, img_integrad], 1)
+    total = np.concatenate([upper, blank_hor, down], 0)
+    
+    blanc = 255*np.ones((100,total.shape[1],3),np.uint8)
+    total = np.concatenate([blanc,total],0)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    cv2.putText(total,title,(30,50),font,2,(0,0,0),3,0)
+    return total
