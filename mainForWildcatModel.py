@@ -1,3 +1,5 @@
+## Only work for IconArt
+
 import numpy as np
 import torch
 from torchvision import models
@@ -14,18 +16,20 @@ from PIL import Image, ImageDraw, ImageFont
 from wildcat.models import resnet101_wildcat
 from wildcat.Attention_models import resnet101_attention
 
+
 from wildcat.util import AveragePrecisionMeter, Warp
 import pandas as pd
+import pathlib
 
 object_categories = ['angel','Child_Jesus', 'crucifixion_of_Jesus',
                     'Mary','nudity', 'ruins','Saint_Sebastien']
 
 def get_parser():
-    parser = argparse.ArgumentParser(description='integrated-gradients for Wildcat Model')
+    parser = argparse.ArgumentParser(description='integrated-gradients for Wildcat Model for IconArt dataset')
     parser.add_argument('--cuda', action='store_true', help='if use the cuda to do the accelartion')
     parser.add_argument('--model-type', type=str, default='wildcat', help='the type of network')
     parser.add_argument('--img', type=str, default='01.jpg', help='the images name')
-    parser.add_argument('--classe', type=str, default='angel', help='the class name')
+    parser.add_argument('--classe', type=str, default='angel', help='the class name if empty string do all the classes')
     # parser.add_argument('data', metavar='DIR',
                         # help='path to dataset (e.g. ../data/')
     parser.add_argument('--image_size', '-i', default=224, type=int,
@@ -188,57 +192,71 @@ def IntegratedGradient_for_oneImage(args):
         # read the image
         path_file_csv = 'data/IconArt_v1/ImageSets/Main/IconArt_v1_Classification_test.csv'
         df =  pd.read_csv(path_file_csv,sep=",")
-        classe = args.classe
-        df_c = df[df[classe]==1]
-        for ci,c in enumerate(classes):
-            if c==classe:
-                #target_label_idx = ci + 1
-                target_label_idx = ci
-        for elt in df_c['item']:
-            img_name = elt + '.jpg'
-            print('Image :',img_name)
-            img = Image.open(path_to_img + img_name).convert("RGB")
-            img = np.array(img.resize((args.image_size,args.image_size), Image.ANTIALIAS))
-            img_normalized = image_transformNoTensor(img).float()
-            #image_normalized = torch.from_numpy(np.array(image_raw)).permute(2, 0, 1)
-            if use_gpu:
-                #image_normalized= image_normalized.cuda()
-                #image_normalized= image_normalized.float().div(255)
-                img_normalized= img_normalized.cuda()
-            
-            # img = cv2.imread(path_to_img + img_name)
-            # img = cv2.resize(img, (args.image_size, args.image_size))
-            # img_bgr = img.astype(np.float32) 
-            # img = img_bgr[:, :, (2, 1, 0)] # Image in RGB
-            # if args.model_type == 'wildcat':
-                # #image_transformNoTensor(img)
-                # img_normalized = (img - model.image_normalization_mean) / model.image_normalization_std
+        classe_args = args.classe
+        if not(classe_args==''):
+            classes_concerned = [classe_args]
+        else:
+            classes_concerned = classes
+        for classe in classes_concerned:
+            df_c = df[df[classe]==1]
+            for ci,c in enumerate(classes):
+                if c==classe:
+                    #target_label_idx = ci + 1
+                    target_label_idx = ci
+            for ielt, elt in enumerate(df_c['item']):
+                path_results = 'results/'+ args.model_type +'/Images/'
+                path_results_data = 'results/'+ args.model_type +'/data/'
+                pathlib.Path(path_results).mkdir(parents=True, exist_ok=True)
+                pathlib.Path(path_results_data).mkdir(parents=True, exist_ok=True)
+                name_output_im = path_results  +elt +'_' + classe+ '.jpg'
+                name_output_data = path_results_data  +elt +'_' + classe+'_IntegratedGrad.npy'
+                if not os.path.isfile(name_output_data):
+                    img_name = elt + '.jpg'
+                    print(ielt,'Image :',img_name)
+                    img = Image.open(path_to_img + img_name).convert("RGB")
+                    img = np.array(img.resize((args.image_size,args.image_size), Image.ANTIALIAS))
+                    img_normalized = image_transformNoTensor(img).float()
+                    #image_normalized = torch.from_numpy(np.array(image_raw)).permute(2, 0, 1)
+                    if use_gpu:
+                        #image_normalized= image_normalized.cuda()
+                        #image_normalized= image_normalized.float().div(255)
+                        img_normalized= img_normalized.cuda()
+                    
+                    # img = cv2.imread(path_to_img + img_name)
+                    # img = cv2.resize(img, (args.image_size, args.image_size))
+                    # img_bgr = img.astype(np.float32) 
+                    # img = img_bgr[:, :, (2, 1, 0)] # Image in RGB
+                    # if args.model_type == 'wildcat':
+                        # #image_transformNoTensor(img)
+                        # img_normalized = (img - model.image_normalization_mean) / model.image_normalization_std
 
-            # calculate the gradient and the label index
-            #gradients, label_index = calculate_outputs_and_gradients([img_normalized], model, target_label_idx, args.cuda)
-            gradients, label_index, output,full_output = calculate_outputs_and_gradients_forWildcat([img_normalized], model, target_label_idx, args.cuda) # For Wildcat i.e. need to normalise the image before
-            
-            print('full vecto output',full_output)
-            print('max output',output)
-            print('label_index',label_index,' : ',classes[label_index])
-            title = elt + ' ' + classes[label_index] +' : '+str(output.detach().cpu().numpy()[0])
-            gradients = np.transpose(gradients[0], (1, 2, 0))
-            img_gradient_overlay = visualize(gradients, img, clip_above_percentile=99, clip_below_percentile=0, overlay=True, mask_mode=True)
-            img_gradient = visualize(gradients, img, clip_above_percentile=99, clip_below_percentile=0, overlay=False)
+                    # calculate the gradient and the label index
+                    #gradients, label_index = calculate_outputs_and_gradients([img_normalized], model, target_label_idx, args.cuda)
+                    gradients, label_index, output,full_output = calculate_outputs_and_gradients_forWildcat([img_normalized], model, target_label_idx, args.cuda) # For Wildcat i.e. need to normalise the image before
+                    
+                    print('full vecto output',full_output)
+                    print('output value for the label index',output)
+                    print('label_index',label_index,' : ',classes[label_index])
+                    title = elt + ' ' + classes[label_index] +' : '+str(output.detach().cpu().numpy()[0])
+                    gradients = np.transpose(gradients[0], (1, 2, 0))
+                    img_gradient_overlay = visualize(gradients, img, clip_above_percentile=99, clip_below_percentile=0, overlay=True, mask_mode=True)
+                    img_gradient = visualize(gradients, img, clip_above_percentile=99, clip_below_percentile=0, overlay=False)
 
-            # calculate the integrated gradients 
+                    # calculate the integrated gradients 
 
-            attributions = random_baseline_integrated_gradients(img, model, label_index, calculate_outputs_and_gradients, \
-                                                                steps=50, num_random_trials=num_random_trials, cuda=args.cuda)
-            img_integrated_gradient_overlay = visualize(attributions, img, clip_above_percentile=99, clip_below_percentile=0, \
-                                                        overlay=True, mask_mode=True)
-            img_integrated_gradient = visualize(attributions, img, clip_above_percentile=99, clip_below_percentile=0, overlay=False)
-            # output_img = generate_entrie_images(img, img_gradient, img_gradient_overlay, img_integrated_gradient, \
-                                                # img_integrated_gradient_overlay)
-            output_img = generate_entrie_images_with_title(img, img_gradient, img_gradient_overlay, img_integrated_gradient, \
-                                                img_integrated_gradient_overlay,title)
-            #print(output_img)
-            cv2.imwrite('results/' + args.model_type + '/' +classe+'_v2_'+ img_name, np.uint8(output_img))
+                    attributions = random_baseline_integrated_gradients(img, model, label_index, calculate_outputs_and_gradients, \
+                                                                        steps=50, num_random_trials=num_random_trials, cuda=args.cuda)
+                    img_integrated_gradient_overlay = visualize(attributions, img, clip_above_percentile=99, clip_below_percentile=0, \
+                                                                overlay=True, mask_mode=True)
+                    img_integrated_gradient = visualize(attributions, img, clip_above_percentile=99, clip_below_percentile=0, overlay=False)
+                    # output_img = generate_entrie_images(img, img_gradient, img_gradient_overlay, img_integrated_gradient, \
+                                                        # img_integrated_gradient_overlay)
+                    output_img = generate_entrie_images_with_title(img, img_gradient, img_gradient_overlay, img_integrated_gradient, \
+                                                        img_integrated_gradient_overlay,title)
+                    #print(output_img)
+
+                    cv2.imwrite(name_output_im , np.uint8(output_img))
+                    np.save(name_output_data, img_integrated_gradient)
     
     else:
         # We will consider only one image
