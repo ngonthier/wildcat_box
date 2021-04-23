@@ -56,9 +56,9 @@ python3 -m wildcat.demo_IconArt_v1 data --image_size 600 --batch_size 8 --lrp 0.
 python3 -m mainForWildcatModel.py  --image_size 600 --batch_size 8 --lrp 0.1 --lr 0.01 --epochs 20 --k 25 --maps 8 --alpha 0.7
 ```
 
-## Citing this repository
+## Citation
 
-If you find this code useful in your research, please consider citing us:
+The main project on which is repository is based on is the following one:
 
 ```
 @inproceedings{Durand_WILDCAT_CVPR_2017,
